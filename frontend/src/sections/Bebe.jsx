@@ -67,6 +67,30 @@ const DEVELOPPEMENT = [
     ],
     nota: "Un bébé qui ne marche pas à 12 mois n'est pas en retard — la fourchette normale va jusqu'à 18 mois.",
   },
+  {
+    tranche: "12-18 mois",
+    titre: "La marche et les premiers mots",
+    items: [
+      "Marche seul entre 9 et 18 mois — grande variabilité normale",
+      "Vocabulaire de 5 à 20 mots vers 18 mois",
+      "Imite les gestes et les actions des adultes",
+      "Mange seul avec les doigts, puis à la cuillère",
+      "Jeu en parallèle (à côté des autres enfants, pas encore avec eux)",
+    ],
+    nota: "Un bébé qui ne marche pas encore à 15 mois mérite une consultation, mais la fourchette normale va bien jusqu'à 18 mois.",
+  },
+  {
+    tranche: "18-24 mois",
+    titre: "L'autonomie et le langage",
+    items: [
+      "Court, monte les escaliers avec aide",
+      "Vocabulaire de 20 à 50 mots, commence à associer 2 mots",
+      "Comprend des consignes simples",
+      "Jeu symbolique (faire semblant) — signe d'intelligence sociale",
+      "Crise d'opposition normale — c'est la construction de l'identité",
+    ],
+    nota: "L'opposition et les colères à cet âge sont développementalement normales. C'est le signe que bébé construit son autonomie.",
+  },
 ];
 
 function OngletCroissance({ bebe }) {
@@ -181,8 +205,11 @@ function OngletDeveloppement({ bebe }) {
   const ageDays = bebe ? Math.floor((Date.now() - new Date(bebe.dateNaissance).getTime()) / 86400000) : 0;
 
   const trancheActive = (tranche) => {
-    const [min, max] = tranche.split("-").map(t => parseInt(t) * 30);
-    return ageDays >= min && ageDays <= (max || 999);
+    // Format "X-Y mois" ou "X mois"
+    const parts = tranche.replace(" mois", "").split("-");
+    const min = parseInt(parts[0]) * 30;
+    const max = parts[1] ? parseInt(parts[1]) * 30 : 999;
+    return ageDays >= min && ageDays <= max;
   };
 
   return (

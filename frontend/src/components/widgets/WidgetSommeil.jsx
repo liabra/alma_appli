@@ -1,14 +1,17 @@
 import { useTimer } from "../../hooks/useTimer";
 import { useSessionStore } from "../../store/useSessionStore";
 import { useBebeStore } from "../../store/useBebeStore";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
-const p = { night: "#1E2A3A", saugePale: "#C8DBC9", sable: "#E8C9A0", textLight: "#7A6E66", white: "#FFFAF6" };
+const p = { night: "#1E2A3A", saugePale: "#C8DBC9", sable: "#E8C9A0", textLight: "#7A6E66" };
 
 export default function WidgetSommeil() {
   const { sommeilEnCours, startSommeil, stopSommeil, getTotalSommeilAujourdhui, getPeriodeSommeilAujourdhui } = useSessionStore();
-  const { getEveilMaxMinutes } = useBebeStore();
+  const { bebe, getEveilMaxMinutes } = useBebeStore();
   const sleeping = !!sommeilEnCours;
+
+  // Prénom dynamique depuis le store
+  const prenom = bebe?.prenom || "Bébé";
 
   const sleepTimer = useTimer();
   const eveilTimer = useTimer();
@@ -58,7 +61,7 @@ export default function WidgetSommeil() {
       <button onClick={toggle} style={{ width: "100%", padding: "20px 0", borderRadius: 18, border: `2px solid ${sleeping ? "#7DD8A040" : "rgba(232,201,160,0.25)"}`, background: sleeping ? "linear-gradient(135deg,rgba(125,216,160,0.12),rgba(125,216,160,0.05))" : "linear-gradient(135deg,rgba(232,201,160,0.12),rgba(232,201,160,0.04))", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
         <span style={{ fontSize: 30 }}>{sleeping ? "😴" : "👀"}</span>
         <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 21, fontWeight: 600, color: sleeping ? "#7DD8A0" : "#E8C9A0" }}>
-          {sleeping ? "Léa dort" : "Léa est éveillée"}
+          {sleeping ? `${prenom} dort` : `${prenom} est éveillé·e`}
         </span>
         <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 36, fontWeight: 700, color: "#fff", letterSpacing: "-1px", lineHeight: 1 }}>
           {sleeping ? sleepTimer.fmt : eveilTimer.fmt}
