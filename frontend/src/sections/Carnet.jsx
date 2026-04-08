@@ -196,7 +196,8 @@ function OngletDemarches() {
 
 export default function Carnet() {
   const [onglet, setOnglet] = useState("rdv");
-  const { bebe } = useBebeStore();
+  const { getBebe } = useBebeStore();
+  const bebe = getBebe();
 
   const onglets = [
     { id: "rdv", label: "📅 Rendez-vous" },

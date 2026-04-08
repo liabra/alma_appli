@@ -258,7 +258,8 @@ function OngletDeveloppement({ bebe }) {
 
 export default function Bebe() {
   const [onglet, setOnglet] = useState("croissance");
-  const { bebe } = useBebeStore();
+  const { getBebe } = useBebeStore();
+  const bebe = getBebe();
 
   const onglets = [
     { id: "croissance", label: "📈 Croissance" },

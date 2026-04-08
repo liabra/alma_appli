@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import Header from "../components/ui/Header";
 import { ALERTES_ALLAITEMENT, MYTHES_ALLAITEMENT } from "../data/allaitement";
 
@@ -184,6 +185,18 @@ export default function Info() {
   const [recherche, setRecherche] = useState("");
   const [catActive, setCatActive] = useState(null);
   const [ficheOuverte, setFicheOuverte] = useState(null);
+  const [searchParams] = useSearchParams();
+
+  // Ouvrir directement une fiche ou filtrer par catégorie depuis l'URL
+  useEffect(() => {
+    const ficheId = searchParams.get("fiche");
+    const cat = searchParams.get("cat");
+    if (ficheId) {
+      const fiche = FICHES.find(f => f.id === ficheId);
+      if (fiche) setFicheOuverte(fiche);
+    }
+    if (cat) setCatActive(cat);
+  }, []);
 
   const fichesFiltrees = useMemo(() => {
     return FICHES.filter(f => {

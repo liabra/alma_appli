@@ -196,9 +196,17 @@ export default function Dashboard() {
                       <div style={{ fontSize: 12, color: c.textLight, lineHeight: 1.6, marginBottom: 8 }}>
                         Retrouve la fiche complète dans la bibliothèque Alma.
                       </div>
-                      <button onClick={(e) => { e.stopPropagation(); navigate("/info"); }}
+                      <button onClick={(e) => { 
+                          e.stopPropagation();
+                          const params = art.ficheId 
+                            ? `?fiche=${art.ficheId}` 
+                            : art.catId 
+                            ? `?cat=${art.catId}` 
+                            : "";
+                          navigate(`/info${params}`);
+                        }}
                         style={{ fontSize: 12, fontWeight: 700, color: c.accent, background: "transparent", border: `1px solid ${c.accent}`, borderRadius: 8, padding: "5px 12px", cursor: "pointer" }}>
-                        Voir dans la bibliothèque →
+                        Voir la fiche complète →
                       </button>
                     </div>
                   )}
@@ -253,12 +261,12 @@ export default function Dashboard() {
         {/* ACCÈS RAPIDE */}
         <div style={{ fontSize: 11, fontWeight: 700, color: c.sectionLabel, letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 6 }}>Accès rapide</div>
         {[
-          { bg: `linear-gradient(135deg, #C4714A, #D4876A)`, icon: "🔍", title: "Selles vertes — normal ?", sub: "Guide des selles du nouveau-né" },
-          { bg: `linear-gradient(135deg, #6B8F71, #4A7A50)`, icon: "🌸", title: "Baby blues ou dépression ?", sub: "Reconnaître et agir" },
-          { bg: `linear-gradient(135deg, #3A4A8A, #2A3A7A)`, icon: "🌙", title: "Sommeil physiologique", sub: "Ce qui est normal à chaque âge" },
+          { bg: `linear-gradient(135deg, #C4714A, #D4876A)`, icon: "💩", title: "Selles vertes — normal ?", sub: "Guide des selles du nouveau-né", path: "/info?fiche=selles_couleurs" },
+          { bg: `linear-gradient(135deg, #6B8F71, #4A7A50)`, icon: "🌸", title: "Baby blues ou dépression ?", sub: "Reconnaître et agir", path: "/info?cat=post-partum" },
+          { bg: `linear-gradient(135deg, #3A4A8A, #2A3A7A)`, icon: "🌙", title: "Sommeil physiologique", sub: "Cycles courts, cododo, sans méthode Ferber", path: "/info?cat=sommeil" },
           { bg: `linear-gradient(135deg, #8A3A3A, #6A2A2A)`, icon: "🩺", title: "Quand appeler le médecin ?", sub: "Signaux d'alerte · IBCLC · PMI · Sage-femme", path: "/alertes" },
         ].map((card, i) => (
-          <div key={i} onClick={() => navigate(card.path || "/info")}
+          <div key={i} onClick={() => navigate(card.path)}
             style={{ background: card.bg, borderRadius: 20, padding: "16px 18px", display: "flex", alignItems: "center", gap: 14, cursor: "pointer" }}>
             <span style={{ fontSize: 24 }}>{card.icon}</span>
             <div style={{ flex: 1 }}>
