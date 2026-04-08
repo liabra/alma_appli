@@ -256,8 +256,9 @@ export default function Dashboard() {
           { bg: `linear-gradient(135deg, #C4714A, #D4876A)`, icon: "🔍", title: "Selles vertes — normal ?", sub: "Guide des selles du nouveau-né" },
           { bg: `linear-gradient(135deg, #6B8F71, #4A7A50)`, icon: "🌸", title: "Baby blues ou dépression ?", sub: "Reconnaître et agir" },
           { bg: `linear-gradient(135deg, #3A4A8A, #2A3A7A)`, icon: "🌙", title: "Sommeil physiologique", sub: "Ce qui est normal à chaque âge" },
+          { bg: `linear-gradient(135deg, #8A3A3A, #6A2A2A)`, icon: "🩺", title: "Quand appeler le médecin ?", sub: "Signaux d'alerte · IBCLC · PMI · Sage-femme", path: "/alertes" },
         ].map((card, i) => (
-          <div key={i} onClick={() => navigate("/info")}
+          <div key={i} onClick={() => navigate(card.path || "/info")}
             style={{ background: card.bg, borderRadius: 20, padding: "16px 18px", display: "flex", alignItems: "center", gap: 14, cursor: "pointer" }}>
             <span style={{ fontSize: 24 }}>{card.icon}</span>
             <div style={{ flex: 1 }}>
