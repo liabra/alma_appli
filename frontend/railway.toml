@@ -3,7 +3,8 @@ builder = "nixpacks"
 buildCommand = "npm install --legacy-peer-deps && npm run build"
 
 [deploy]
-startCommand = "npx serve dist -p $PORT --single"
+startCommand = "npx serve dist --listen $PORT --single --no-clipboard"
 healthcheckPath = "/"
-healthcheckTimeout = 30
+healthcheckTimeout = 120
 restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
