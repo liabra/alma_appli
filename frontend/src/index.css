@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --terracotta: #C4714A;
+  --terracotta-light: #D4876A;
+  --terracotta-pale: #F0D5C5;
+  --lin: #F5EDE3;
+  --lin-dark: #EDE0D0;
+  --sauge: #6B8F71;
+  --sauge-pale: #C8DBC9;
+  --sable: #E8C9A0;
+  --text: #2C2C2C;
+  --text-light: #7A6E66;
+  --white: #FFFAF6;
+  --night: #1E2A3A;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: #E8DDD3;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+}
+
+::-webkit-scrollbar { display: none; }
+scrollbar-width: none;

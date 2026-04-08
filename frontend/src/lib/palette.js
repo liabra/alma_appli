@@ -1,0 +1,15 @@
+export const palette = {
+  terracotta: "#C4714A",
+  terracottaL: "#D4876A",
+  terracottaPale: "#F0D5C5",
+  lin: "#F5EDE3",
+  linDark: "#EDE0D0",
+  sauge: "#6B8F71",
+  saugePale: "#C8DBC9",
+  sable: "#E8C9A0",
+  text: "#2C2C2C",
+  textLight: "#7A6E66",
+  white: "#FFFAF6",
+  night: "#1E2A3A",
+  nightDeep: "#141E2A",
+};
