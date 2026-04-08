@@ -10,6 +10,7 @@ import Moi from "./sections/Moi";
 import Info from "./sections/Info";
 import Carnet from "./sections/Carnet";
 import Profil from "./sections/Profil";
+import Recuperation from "./sections/Recuperation";
 import NavBar from "./components/ui/NavBar";
 
 export default function App() {
@@ -20,7 +21,15 @@ export default function App() {
   useEffect(() => { initUser(); }, []);
 
   const bebe = getBebe();
-  if (!uuid || isNewUser || !bebe) return <Onboarding />;
+
+  // Route récupération toujours accessible
+  if (window.location.pathname === "/recuperation") {
+    return <Routes><Route path="/recuperation" element={<Recuperation />} /></Routes>;
+  }
+
+  if (!uuid || isNewUser || !bebe) {
+    return <Onboarding />;
+  }
 
   return (
     <div style={{ background: "#E8DDD3", minHeight: "100vh" }}>
@@ -31,6 +40,7 @@ export default function App() {
         <Route path="/info" element={<Info />} />
         <Route path="/carnet" element={<Carnet />} />
         <Route path="/profil" element={<Profil />} />
+        <Route path="/recuperation" element={<Recuperation />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <NavBar />

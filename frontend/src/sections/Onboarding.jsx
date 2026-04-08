@@ -76,6 +76,10 @@ export default function Onboarding() {
             ))}
           </div>
           <button style={btn} onClick={next}>Commencer 🌿</button>
+          <button onClick={() => window.location.href = "/recuperation"}
+            style={{ marginTop: 10, fontSize: 12, color: p.textLight, background: "transparent", border: "none", cursor: "pointer", textDecoration: "underline" }}>
+            J'ai déjà un compte — restaurer mes données
+          </button>
         </>
       )}
 

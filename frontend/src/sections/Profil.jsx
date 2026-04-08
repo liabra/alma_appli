@@ -3,6 +3,7 @@ import { useBebeStore } from "../store/useBebeStore";
 import { useSessionStore } from "../store/useSessionStore";
 import { useUserStore } from "../store/useUserStore";
 import { useNavigate } from "react-router-dom";
+import { generateRecoveryCode } from "../hooks/useSync";
 
 const p = {
   terracotta: "#C4714A", terracottaL: "#D4876A", terracottaPale: "#F0D5C5",
@@ -58,6 +59,15 @@ export default function Profil() {
   const { bebes, bebeActifId, setBebeActif, ajouterBebe, supprimerBebe, getAgeLabel, getBebe } = useBebeStore();
   const { uuid } = useUserStore();
   const navigate = useNavigate();
+  const [recoveryCode, setRecoveryCode] = useState(null);
+  const [loadingCode, setLoadingCode] = useState(false);
+
+  const obtenirCode = async () => {
+    setLoadingCode(true);
+    const code = await generateRecoveryCode(uuid);
+    setRecoveryCode(code || "Erreur — réessaie plus tard");
+    setLoadingCode(false);
+  };
   const [ajouterMode, setAjouterMode] = useState(false);
   const [confirmerSuppr, setConfirmerSuppr] = useState(null);
 
@@ -133,14 +143,38 @@ export default function Profil() {
           })}
         </div>
 
-        {/* Compte anonyme */}
+        {/* Compte anonyme + code récupération */}
         <div style={{ background: p.white, borderRadius: 20, padding: "18px 20px", border: `1px solid ${p.linDark}` }}>
           <div style={{ fontSize: 15, fontWeight: 700, color: p.text, marginBottom: 10 }}>🔒 Compte anonyme</div>
           <div style={{ fontSize: 12, color: p.textLight, lineHeight: 1.6, marginBottom: 12 }}>
-            Ton identifiant anonyme. Aucun email, aucun nom réel n'est collecté. Tes données restent sur ton appareil.
+            Aucun email, aucun nom réel. Tes données sont synchronisées sur nos serveurs et liées à ton identifiant anonyme.
           </div>
+
+          {/* Code de récupération */}
+          <div style={{ background: p.lin, borderRadius: 12, padding: "14px", marginBottom: 12, border: `1px solid ${p.terracottaPale}` }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: p.terracotta, marginBottom: 6 }}>🔑 Code de récupération</div>
+            <div style={{ fontSize: 12, color: p.textLight, lineHeight: 1.5, marginBottom: 10 }}>
+              Si tu changes de téléphone, note ce code. Il te permettra de retrouver toutes tes données.
+            </div>
+            {recoveryCode ? (
+              <>
+                <div style={{ fontSize: 22, fontWeight: 700, color: p.text, fontFamily: "'Cormorant Garamond', serif", letterSpacing: "2px", textAlign: "center", padding: "10px", background: p.white, borderRadius: 10, marginBottom: 8, border: `2px solid ${p.terracottaPale}` }}>
+                  {recoveryCode}
+                </div>
+                <div style={{ fontSize: 11, color: p.textLight, textAlign: "center", fontStyle: "italic" }}>
+                  📸 Prends-en une photo ou note-le quelque part
+                </div>
+              </>
+            ) : (
+              <button onClick={obtenirCode} disabled={loadingCode}
+                style={{ width: "100%", padding: "10px", borderRadius: 10, border: "none", background: p.terracotta, color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+                {loadingCode ? "Génération..." : "Afficher mon code de récupération"}
+              </button>
+            )}
+          </div>
+
           <div style={{ fontSize: 11, color: p.textLight, fontFamily: "monospace", background: p.lin, padding: "8px 12px", borderRadius: 8, wordBreak: "break-all" }}>
-            {uuid || "—"}
+            ID : {uuid || "—"}
           </div>
         </div>
 
