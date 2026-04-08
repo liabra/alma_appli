@@ -4,6 +4,7 @@ import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } 
 import { CSS } from "@dnd-kit/utilities";
 import Header from "../components/ui/Header";
 import { useSessionStore } from "../store/useSessionStore";
+import { useBebeStore } from "../store/useBebeStore";
 import WidgetAlimentation from "../components/widgets/WidgetAlimentation";
 import WidgetCouches from "../components/widgets/WidgetCouches";
 import WidgetSommeil from "../components/widgets/WidgetSommeil";
@@ -43,7 +44,21 @@ function SortableWidget({ id, editMode, onHide, children }) {
 }
 
 export default function Dashboard() {
-  const { widgetOrder, hiddenWidgets, setWidgetOrder, toggleHideWidget } = useSessionStore();
+  const { widgetOrder, hiddenWidgets, setWidgetOrder, toggleHideWidget, getTeteesAujourdhui } = useSessionStore();
+  const { bebe, getAgeLabel, getAgeDays } = useBebeStore();
+  const prenom = bebe?.prenom || "Bébé";
+  const ageDays = getAgeDays() || 0;
+  const tetees = getTeteesAujourdhui ? getTeteesAujourdhui() : [];
+
+  // Message d'encouragement dynamique selon l'âge
+  const getEncouragement = () => {
+    if (ageDays < 14) return `Tu traverses les premiers jours avec ${prenom} — les plus intenses. Tu fais exactement ce qu'il faut.`;
+    if (ageDays < 30) return `${prenom} a ${getAgeLabel()} et tu apprends à te connaître ensemble. C'est un travail remarquable.`;
+    if (ageDays < 90) return `Chaque jour avec ${prenom} est un pas de plus. Tu construis quelque chose de solide.`;
+    if (ageDays < 180) return `${prenom} grandit et s'épanouit grâce à toi. Tout ce que tu fais compte.`;
+    if (ageDays < 365) return `${prenom} a ${getAgeLabel()} — regarde le chemin parcouru ensemble depuis le début.`;
+    return `${prenom} grandit si vite. Prends un moment pour reconnaître tout ce que tu fais chaque jour.`;
+  };
   const [editMode, setEditMode] = useState(false);
 
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }));
@@ -81,9 +96,7 @@ export default function Dashboard() {
           <div style={{ position: "absolute", top: -30, right: -30, width: 100, height: 100, borderRadius: "50%", background: "rgba(107,143,113,0.25)", filter: "blur(30px)" }} />
           <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(200,219,201,0.6)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 8 }}>✦ Alma pour toi · ce matin</div>
           <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 17, fontWeight: 500, color: "#fff", lineHeight: 1.55, marginBottom: 12 }}>
-            Tu es là, tu fais de ton mieux, et c'est{" "}
-            <span style={{ color: "#C8DBC9", fontWeight: 600 }}>remarquable.</span>{" "}
-            Chaque journée avec un nouveau-né est un exploit.
+            <span style={{ color: "#C8DBC9", fontWeight: 600 }}>{getEncouragement()}</span>
           </div>
           <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", fontStyle: "italic" }}>
             Ceci n'est pas un avis médical · en cas d'inquiétude, consulte un professionnel

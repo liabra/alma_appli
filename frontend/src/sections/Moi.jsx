@@ -1,17 +1,13 @@
 import { useState } from "react";
 import Header from "../components/ui/Header";
 import { RESSOURCES_SOUTIEN, EDINBURGH_QUESTIONS } from "../data/postpartum";
+import { useSessionStore } from "../store/useSessionStore";
 
 const p = {
   terracotta: "#C4714A", terracottaL: "#D4876A", terracottaPale: "#F0D5C5",
   lin: "#F5EDE3", linDark: "#EDE0D0", sauge: "#6B8F71", saugePale: "#C8DBC9",
   text: "#2C2C2C", textLight: "#7A6E66", white: "#FFFAF6", night: "#1E2A3A",
 };
-
-const CHECKINS_DEMO = [
-  { date: "Lun", mood: 2 }, { date: "Mar", mood: 1 }, { date: "Mer", mood: 3 },
-  { date: "Jeu", mood: 2 }, { date: "Ven", mood: 3 }, { date: "Sam", mood: 4 }, { date: "Dim", mood: 3 },
-];
 
 const CORPS_SECTIONS = [
   {
@@ -188,9 +184,12 @@ function OngletCorps() {
 }
 
 function OngletMental() {
+  const { getCheckinsDerniersDays } = useSessionStore();
+  const checkinsAffichage = getCheckinsDerniersDays(7);
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-      <MoodBar checkins={CHECKINS_DEMO} />
+      <MoodBar checkins={checkinsAffichage} />
       <Edinbourg />
       <div style={{ background: `linear-gradient(135deg, #2C3E2D, #1A2E1B)`, borderRadius: 20, padding: "18px 20px" }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: p.saugePale, marginBottom: 10 }}>💬 Ressources de soutien</div>

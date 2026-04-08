@@ -71,6 +71,29 @@ export const useSessionStore = create(
         );
       },
 
+      // Check-ins humeur
+      checkins: [], // [{ date: 'YYYY-MM-DD', mood: 0-4, texte: '' }]
+      addCheckin: (mood, texte = "") => {
+        const today = new Date().toISOString().split("T")[0];
+        set((s) => ({
+          checkins: [
+            ...s.checkins.filter(c => c.date !== today), // 1 seul par jour
+            { date: today, mood, texte, timestamp: Date.now() }
+          ]
+        }));
+      },
+      getCheckinsDerniersDays: (n = 7) => {
+        const checkins = get().checkins;
+        return Array.from({ length: n }, (_, i) => {
+          const d = new Date();
+          d.setDate(d.getDate() - (n - 1 - i));
+          const dateStr = d.toISOString().split("T")[0];
+          const found = checkins.find(c => c.date === dateStr);
+          const labels = ["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];
+          return { date: labels[d.getDay()], mood: found ? found.mood : null };
+        });
+      },
+
       // Dashboard config
       widgetOrder: ["alimentation", "soutien", "couches", "sommeil", "sante"],
       hiddenWidgets: [],

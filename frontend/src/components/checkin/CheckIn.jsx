@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { useSessionStore } from "../../store/useSessionStore";
+
 const MOODS = [
   { id: 0, emoji: "😔", label: "Difficile" },
   { id: 1, emoji: "😐", label: "Bof" },
@@ -11,12 +13,16 @@ const MOODS = [
 const p = { terracotta: "#C4714A", terracottaPale: "#F0D5C5", lin: "#F5EDE3", linDark: "#EDE0D0", text: "#2C2C2C", textLight: "#7A6E66", white: "#FFFAF6" };
 
 export default function CheckIn() {
+  const { addCheckin } = useSessionStore();
   const [done, setDone] = useState(false);
   const [selectedMood, setSelectedMood] = useState(null);
   const [texte, setTexte] = useState("");
   const [showTexte, setShowTexte] = useState(false);
 
-  const envoyer = () => setDone(true);
+  const envoyer = () => {
+    if (selectedMood !== null) addCheckin(selectedMood, texte);
+    setDone(true);
+  };
 
   if (done) {
     return (
