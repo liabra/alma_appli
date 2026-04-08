@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.database import create_db_and_tables
-from app.routers import auth, bebe
+from app.routers import auth, bebe, checkin, encouragement, share
 
 app = FastAPI(
     title="Alma API",
@@ -10,7 +10,6 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# CORS
 origins = settings.CORS_ORIGINS.split(",")
 app.add_middleware(
     CORSMiddleware,
@@ -20,9 +19,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Routers
 app.include_router(auth.router)
 app.include_router(bebe.router)
+app.include_router(checkin.router)
+app.include_router(encouragement.router)
+app.include_router(share.router)
 
 @app.on_event("startup")
 def on_startup():

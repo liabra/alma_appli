@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useUserStore } from "./store/useUserStore";
 import { useBebeStore } from "./store/useBebeStore";
+import { useSync } from "./hooks/useSync";
 import Onboarding from "./sections/Onboarding";
 import Dashboard from "./sections/Dashboard";
 import Bebe from "./sections/Bebe";
@@ -13,12 +14,12 @@ import NavBar from "./components/ui/NavBar";
 export default function App() {
   const { uuid, initUser, isNewUser } = useUserStore();
   const { bebe } = useBebeStore();
+  useSync();
 
   useEffect(() => {
     initUser();
   }, []);
 
-  // Pas encore d'UUID ou première ouverture → onboarding
   if (!uuid || isNewUser || !bebe) {
     return <Onboarding />;
   }
