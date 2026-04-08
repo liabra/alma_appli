@@ -1,15 +1,13 @@
 server {
-    listen 80;
+    listen ${PORT};
     server_name _;
     root /usr/share/nginx/html;
     index index.html;
 
-    # SPA — toutes les routes vers index.html
     location / {
         try_files $uri $uri/ /index.html;
     }
 
-    # Cache assets
     location /assets {
         expires 1y;
         add_header Cache-Control "public, immutable";
