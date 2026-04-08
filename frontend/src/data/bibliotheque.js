@@ -5,6 +5,30 @@
 
 export const DISCLAIMER_GLOBAL = "Les informations ci-dessous sont à titre éducatif et ne remplacent pas l'avis d'un professionnel de santé.";
 
+export const SOURCES_DISCLAIMER = "Le contenu d'Alma est rédigé de manière originale. Les sources listées ci-dessous sont les références qui ont guidé sa rédaction — elles appartiennent à leurs auteurs respectifs. Alma ne reproduit pas leur contenu.";
+
+
+// ─── SOURCES RÉUTILISABLES ────────────────────────────────────────────────────
+const S = {
+  OMS_ALLAIT:   { org: "OMS", titre: "Alimentation du nourrisson et du jeune enfant", url: "https://www.who.int/fr/news-room/fact-sheets/detail/infant-and-young-child-feeding" },
+  LLL_FR:       { org: "La Leche League France", titre: "Ressources sur l'allaitement maternel", url: "https://www.lllfrance.org/vous-informer/votre-allaitement" },
+  HAS_ALLAIT:   { org: "Haute Autorité de Santé (HAS)", titre: "Allaitement maternel — mise en œuvre et poursuite dans les 6 premiers mois", url: "https://www.has-sante.fr/jcms/c_272220/fr/allaitement-maternel-mise-en-oeuvre-et-poursuite-dans-les-6-premiers-mois-de-vie-de-l-enfant" },
+  AMELI:        { org: "Assurance Maladie (Ameli.fr)", titre: "Santé de l'enfant — recommandations", url: "https://www.ameli.fr/assure/sante/bonne-pratique/grossesse-accouchement" },
+  HAS_MSN:      { org: "Haute Autorité de Santé (HAS)", titre: "Mort inattendue du nourrisson — prévention et prise en charge", url: "https://www.has-sante.fr" },
+  SFP:          { org: "Société Française de Pédiatrie (SFP)", titre: "Recommandations de nutrition pédiatrique", url: "https://www.sfpediatrie.com" },
+  ESPGHAN:      { org: "ESPGHAN", titre: "Complementary feeding: a position paper by ESPGHAN (2022)", url: "https://espghan.org" },
+  ELACTANCIA:   { org: "APILAM", titre: "e-lactancia — compatibilité médicaments et allaitement", url: "https://www.e-lactancia.org" },
+  LACTMED:      { org: "NIH / NLM", titre: "LactMed — Drugs and Lactation Database", url: "https://www.ncbi.nlm.nih.gov/books/NBK501922/" },
+  PIKLER:       { org: "Institut Pikler-Lóczy", titre: "Motricité libre et développement de l'enfant", url: "https://www.pikler.fr" },
+  BOWLBY:       { org: "Fondation pour l'enfance", titre: "La théorie de l'attachement — Bowlby & Ainsworth", url: "https://www.fondation-enfance.org" },
+  MAMAN_BLUES:  { org: "Maman Blues", titre: "Association de soutien aux difficultés maternelles", url: "https://www.maman-blues.fr" },
+  ORDRE_SF:     { org: "Conseil National de l'Ordre des Sages-Femmes", titre: "Annuaire des sages-femmes", url: "https://www.ordre-sages-femmes.fr" },
+  IBCLC_FR:     { org: "Association Française des Consultantes en Lactation (AFCL)", titre: "Trouver une consultante IBCLC", url: "https://www.consultante-en-lactation.fr/trouver-une-ibclc/" },
+  VACC_INFO:    { org: "Santé Publique France", titre: "Vaccination-info-service — calendrier vaccinal", url: "https://www.vaccination-info-service.fr" },
+  PREMIERS_JOURS: { org: "Ministère des Solidarités et de la Santé", titre: "Les 1000 premiers jours — ressources officielles", url: "https://www.1000-premiers-jours.fr" },
+  INPES:        { org: "Santé Publique France (INPES)", titre: "Guide nutrition pendant et après la grossesse", url: "https://www.santepubliquefrance.fr" },
+};
+
 export const FICHES = [
 
   // ─── ALLAITEMENT ──────────────────────────────────────────────────────────
@@ -24,6 +48,7 @@ export const FICHES = [
     ],
     lien: "https://www.lllfrance.org/vous-informer/votre-allaitement/demarrage/1757-la-prise-du-sein",
     lienLabel: "LLL France : la prise du sein →",
+    sources: [S.LLL_FR, S.HAS_ALLAIT, S.IBCLC_FR],
     urgence: false,
   },
 
@@ -42,6 +67,7 @@ export const FICHES = [
     ],
     lien: "https://www.lllfrance.org/vous-informer/votre-allaitement/physiologie/1775-la-production-de-lait",
     lienLabel: "LLL France : la production de lait →",
+    sources: [S.LLL_FR, S.OMS_ALLAIT, S.HAS_ALLAIT],
     urgence: false,
   },
 
@@ -60,6 +86,7 @@ export const FICHES = [
     ],
     lien: "https://www.lllfrance.org/vous-informer/votre-allaitement/physiologie",
     lienLabel: "LLL France : physiologie de l'allaitement →",
+    sources: [S.LLL_FR, S.HAS_ALLAIT],
     urgence: false,
   },
 
@@ -80,6 +107,7 @@ export const FICHES = [
     ],
     lien: "https://www.lllfrance.org/vous-informer/votre-allaitement/problemes/1763-l-engorgement",
     lienLabel: "LLL France : l'engorgement →",
+    sources: [S.LLL_FR, S.IBCLC_FR],
     urgence: false,
   },
 
@@ -100,6 +128,7 @@ export const FICHES = [
     ],
     lien: "https://www.lllfrance.org/vous-informer/votre-allaitement/problemes/1762-les-crevasses",
     lienLabel: "LLL France : crevasses →",
+    sources: [S.LLL_FR, S.IBCLC_FR, S.HAS_ALLAIT],
     urgence: false,
   },
 
@@ -119,6 +148,7 @@ export const FICHES = [
     ],
     lien: "https://www.lllfrance.org/vous-informer/votre-allaitement/problemes/1764-la-mastite",
     lienLabel: "LLL France : mastite →",
+    sources: [S.LLL_FR, S.HAS_ALLAIT, S.IBCLC_FR],
     urgence: true,
   },
 
@@ -137,6 +167,7 @@ export const FICHES = [
     ],
     lien: "https://www.lllfrance.org",
     lienLabel: "Contacter une animatrice LLL →",
+    sources: [S.LLL_FR, S.IBCLC_FR],
     urgence: false,
   },
 
@@ -156,6 +187,7 @@ export const FICHES = [
     ],
     lien: "https://www.lllfrance.org/vous-informer/votre-allaitement/problemes/1808-la-greve-du-sein",
     lienLabel: "LLL France : grève du sein →",
+    sources: [S.LLL_FR, S.IBCLC_FR],
     urgence: false,
   },
 
@@ -174,6 +206,7 @@ export const FICHES = [
     ],
     lien: "https://www.lllfrance.org/vous-informer/votre-allaitement/situations-particulieres",
     lienLabel: "LLL France : situations particulières →",
+    sources: [S.LLL_FR, S.OMS_ALLAIT],
     urgence: false,
   },
 
@@ -192,6 +225,7 @@ export const FICHES = [
     ],
     lien: "https://www.lllfrance.org/vous-informer/votre-allaitement/situations-particulieres/1832-le-sevrage",
     lienLabel: "LLL France : le sevrage →",
+    sources: [S.LLL_FR, S.OMS_ALLAIT],
     urgence: false,
   },
 
@@ -210,6 +244,7 @@ export const FICHES = [
     ],
     lien: "https://www.lllfrance.org",
     lienLabel: "LLL France — groupes de soutien →",
+    sources: [S.LLL_FR],
     urgence: false,
   },
 
@@ -228,6 +263,7 @@ export const FICHES = [
     ],
     lien: "https://www.e-lactancia.org",
     lienLabel: "e-lactancia.org — vérifier la compatibilité →",
+    sources: [S.ELACTANCIA, S.LACTMED, S.IBCLC_FR],
     urgence: false,
   },
 
@@ -248,6 +284,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.PREMIERS_JOURS, S.SFP],
     urgence: false,
   },
 
@@ -268,6 +305,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP, S.HAS_MSN, S.PREMIERS_JOURS],
     urgence: false,
   },
 
@@ -286,6 +324,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP, S.PREMIERS_JOURS],
     urgence: false,
   },
 
@@ -304,6 +343,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP, S.PREMIERS_JOURS],
     urgence: false,
   },
 
@@ -322,6 +362,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP, S.PREMIERS_JOURS],
     urgence: false,
   },
 
@@ -340,6 +381,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP, S.PREMIERS_JOURS],
     urgence: false,
   },
 
@@ -358,6 +400,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP],
     urgence: false,
   },
 
@@ -378,6 +421,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP, S.PREMIERS_JOURS],
     urgence: false,
   },
 
@@ -396,6 +440,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP, S.PREMIERS_JOURS],
     urgence: false,
   },
 
@@ -415,6 +460,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP, S.AMELI],
     urgence: false,
   },
 
@@ -432,6 +478,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP, S.PREMIERS_JOURS, S.BOWLBY],
     urgence: false,
   },
 
@@ -453,6 +500,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.PIKLER, S.SFP],
     urgence: false,
   },
 
@@ -471,6 +519,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.PIKLER],
     urgence: false,
   },
 
@@ -492,6 +541,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.ESPGHAN, S.SFP, S.AMELI],
     urgence: false,
   },
 
@@ -510,6 +560,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.ESPGHAN, S.SFP],
     urgence: false,
   },
 
@@ -529,6 +580,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP, S.AMELI, S.ESPGHAN],
     urgence: false,
   },
 
@@ -548,6 +600,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP, S.AMELI],
     urgence: false,
   },
 
@@ -569,6 +622,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.PIKLER, S.SFP],
     urgence: false,
   },
 
@@ -587,6 +641,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.BOWLBY, S.PREMIERS_JOURS, S.SFP],
     urgence: false,
   },
 
@@ -606,6 +661,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP, S.PREMIERS_JOURS, S.OMS_ALLAIT],
     urgence: false,
   },
 
@@ -625,6 +681,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP, S.PREMIERS_JOURS],
     urgence: false,
   },
 
@@ -642,6 +699,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP, S.PREMIERS_JOURS],
     urgence: false,
   },
 
@@ -662,6 +720,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.MAMAN_BLUES, S.PREMIERS_JOURS],
     urgence: false,
   },
 
@@ -680,6 +739,7 @@ export const FICHES = [
     ],
     lien: "https://www.maman-blues.fr",
     lienLabel: "Maman Blues — association de soutien →",
+    sources: [S.HAS_ALLAIT, S.MAMAN_BLUES, S.AMELI],
     urgence: false,
   },
 
@@ -698,6 +758,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.HAS_ALLAIT, S.ORDRE_SF, S.AMELI],
     urgence: false,
   },
 
@@ -716,6 +777,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.HAS_ALLAIT, S.ORDRE_SF],
     urgence: false,
   },
 
@@ -735,6 +797,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.INPES, S.AMELI, S.SFP],
     urgence: false,
   },
 
@@ -753,6 +816,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.MAMAN_BLUES, S.PREMIERS_JOURS, S.AMELI],
     urgence: false,
   },
 
@@ -771,6 +835,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.PREMIERS_JOURS, S.MAMAN_BLUES],
     urgence: false,
   },
 
@@ -792,6 +857,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP, S.AMELI],
     urgence: false,
   },
 
@@ -810,6 +876,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP, S.AMELI, S.HAS_ALLAIT],
     urgence: false,
   },
 
@@ -829,6 +896,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP, S.ESPGHAN, S.AMELI],
     urgence: false,
   },
 
@@ -847,6 +915,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP, S.AMELI],
     urgence: false,
   },
 
@@ -865,6 +934,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP, S.AMELI],
     urgence: false,
   },
 
@@ -884,6 +954,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP, S.AMELI],
     urgence: false,
   },
 
@@ -902,6 +973,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP, S.AMELI, S.LLL_FR],
     urgence: false,
   },
 
@@ -921,6 +993,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP, S.AMELI],
     urgence: false,
   },
 
@@ -940,6 +1013,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.SFP, S.AMELI],
     urgence: false,
   },
 
@@ -958,6 +1032,7 @@ export const FICHES = [
     ],
     lien: "https://www.vaccination-info-service.fr",
     lienLabel: "vaccination-info-service.fr — calendrier officiel →",
+    sources: [S.VACC_INFO, S.SFP, S.AMELI],
     urgence: false,
   },
 
@@ -978,6 +1053,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.HAS_MSN, S.SFP, S.AMELI],
     urgence: false,
   },
 
@@ -998,6 +1074,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.LLL_FR, S.OMS_ALLAIT, S.IBCLC_FR],
     urgence: false,
   },
 
@@ -1015,6 +1092,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.LLL_FR, S.OMS_ALLAIT],
     urgence: false,
   },
 
@@ -1032,6 +1110,7 @@ export const FICHES = [
     ],
     lien: null,
     lienLabel: null,
+    sources: [S.LLL_FR, S.HAS_ALLAIT],
     urgence: false,
   },
 ];

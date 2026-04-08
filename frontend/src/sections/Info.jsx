@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Header from "../components/ui/Header";
-import { FICHES, CAT_COLORS_LIB, DISCLAIMER_GLOBAL } from "../data/bibliotheque";
+import { FICHES, CAT_COLORS_LIB, DISCLAIMER_GLOBAL, SOURCES_DISCLAIMER } from "../data/bibliotheque";
 
 const p = {
   terracotta: "#C4714A", terracottaL: "#D4876A", terracottaPale: "#F0D5C5",
@@ -78,6 +78,27 @@ function FicheDetail({ fiche, onClose }) {
             <span style={{ fontSize: 18 }}>🔗</span>
             <span style={{ fontSize: 13, fontWeight: 600, color: p.terracotta }}>{fiche.lienLabel}</span>
           </a>
+        )}
+
+        {/* Section sources */}
+        {fiche.sources && fiche.sources.length > 0 && (
+          <div style={{ background: p.white, borderRadius: 14, padding: "14px 16px", border: `1px solid ${p.linDark}`, marginBottom: 16 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: p.textLight, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 4 }}>
+              📚 Sources de référence
+            </div>
+            <div style={{ fontSize: 11, color: p.textLight, fontStyle: "italic", marginBottom: 10, lineHeight: 1.5 }}>
+              {SOURCES_DISCLAIMER}
+            </div>
+            {fiche.sources.map((src, i) => (
+              <div key={i} style={{ marginBottom: 8, paddingBottom: 8, borderBottom: i < fiche.sources.length - 1 ? `1px solid ${p.linDark}` : "none" }}>
+                <div style={{ fontSize: 12, fontWeight: 600, color: p.text }}>{src.org}</div>
+                <a href={src.url} target="_blank" rel="noreferrer"
+                  style={{ fontSize: 11, color: p.terracotta, textDecoration: "none", lineHeight: 1.4, display: "block", marginTop: 2 }}>
+                  {src.titre} →
+                </a>
+              </div>
+            ))}
+          </div>
         )}
 
         <div style={{ fontSize: 11, color: p.textLight, textAlign: "center", fontStyle: "italic", padding: "8px 0" }}>
