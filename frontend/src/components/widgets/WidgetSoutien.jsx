@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSessionStore } from "../../store/useSessionStore";
 
 const p = { sauge: "#6B8F71", saugePale: "#C8DBC9", linDark: "#EDE0D0", lin: "#F5EDE3", text: "#2C2C2C", textLight: "#7A6E66", white: "#FFFAF6", terracotta: "#C4714A", terracottaPale: "#F0D5C5" };
 
@@ -109,7 +110,7 @@ function FormulaireAlliee({ onSave, onCancel }) {
   );
 }
 
-function AllieCard({ alliee, disponible, ouvert, onClick, onDelete }) {
+function AllieCard({ alliee, disponible, ouvert, onClick, onDelete, onEdit, modifierMode, onSaveEdit }) {
   const prochainCreneau = !disponible ? alliee.creneaux.find(c => c.debut > heureActuelle()) : null;
   return (
     <div style={{ borderRadius: 14, border: `1.5px solid ${disponible ? p.saugePale : p.linDark}`, background: disponible ? "#F2F8F2" : p.lin, marginBottom: 6, overflow: "hidden", opacity: disponible ? 1 : 0.65 }}>
@@ -145,10 +146,16 @@ function AllieCard({ alliee, disponible, ouvert, onClick, onDelete }) {
           <div style={{ fontSize: 11, color: p.sauge, fontWeight: 600, marginBottom: 8 }}>
             🕐 {alliee.creneaux.map(fmtCreneau).join(" · ")}
           </div>
-          <button onClick={e => { e.stopPropagation(); onDelete(alliee.id); }}
-            style={{ fontSize: 11, color: "#C04040", background: "#FFF0F0", border: "1px solid #F0C0C0", borderRadius: 8, padding: "4px 10px", cursor: "pointer" }}>
-            Supprimer
-          </button>
+          <div style={{ display: "flex", gap: 6, marginTop: 4 }}>
+            <button onClick={e => { e.stopPropagation(); onEdit(); }}
+              style={{ fontSize: 11, color: p.sauge, background: p.saugePale, border: "none", borderRadius: 8, padding: "4px 10px", cursor: "pointer" }}>
+              ✎ Modifier
+            </button>
+            <button onClick={e => { e.stopPropagation(); onDelete(alliee.id); }}
+              style={{ fontSize: 11, color: "#C04040", background: "#FFF0F0", border: "1px solid #F0C0C0", borderRadius: 8, padding: "4px 10px", cursor: "pointer" }}>
+              Supprimer
+            </button>
+          </div>
         </div>
       )}
     </div>
@@ -156,15 +163,17 @@ function AllieCard({ alliee, disponible, ouvert, onClick, onDelete }) {
 }
 
 export default function WidgetSoutien() {
-  const [alliees, setAlliees] = useState([]);
+  const { alliees, addAlliee, updateAlliee, supprimerAlliee } = useSessionStore();
   const [ficheOuverte, setFicheOuverte] = useState(null);
   const [ajouterMode, setAjouterMode] = useState(false);
+  const [modifierMode, setModifierMode] = useState(null); // id de l'alliée en cours de modif
 
   const dispo = alliees.filter(isDisponible);
   const indispo = alliees.filter(a => !isDisponible(a));
 
-  const sauvegarder = (alliee) => { setAlliees(prev => [...prev, alliee]); setAjouterMode(false); };
-  const supprimer = (id) => { setAlliees(prev => prev.filter(a => a.id !== id)); setFicheOuverte(null); };
+  const sauvegarder = (alliee) => { addAlliee(alliee); setAjouterMode(false); };
+  const supprimer = (id) => { supprimerAlliee(id); setFicheOuverte(null); };
+  const sauvegarderModif = (id, data) => { updateAlliee(id, data); setModifierMode(null); };
 
   return (
     <div style={{ background: p.white, borderRadius: 20, padding: "18px 20px", border: `1px solid ${p.saugePale}`, boxShadow: "0 2px 12px rgba(107,143,113,0.06)" }}>
@@ -191,14 +200,14 @@ export default function WidgetSoutien() {
       {dispo.length > 0 && (
         <>
           <div style={{ fontSize: 10, fontWeight: 700, color: p.textLight, letterSpacing: "0.07em", textTransform: "uppercase", marginBottom: 6 }}>Disponibles maintenant</div>
-          {dispo.map(a => <AllieCard key={a.id} alliee={a} disponible ouvert={ficheOuverte === a.id} onClick={() => setFicheOuverte(ficheOuverte === a.id ? null : a.id)} onDelete={supprimer} />)}
+          {dispo.map(a => <AllieCard key={a.id} alliee={a} disponible ouvert={ficheOuverte === a.id} onClick={() => setFicheOuverte(ficheOuverte === a.id ? null : a.id)} onDelete={supprimer} onEdit={() => setModifierMode(a.id)} modifierMode={modifierMode === a.id} onSaveEdit={(data) => sauvegarderModif(a.id, data)} />)}
         </>
       )}
 
       {indispo.length > 0 && (
         <>
           <div style={{ fontSize: 10, fontWeight: 700, color: p.textLight, letterSpacing: "0.07em", textTransform: "uppercase", marginBottom: 6, marginTop: dispo.length > 0 ? 12 : 0 }}>Plus tard</div>
-          {indispo.map(a => <AllieCard key={a.id} alliee={a} disponible={false} ouvert={ficheOuverte === a.id} onClick={() => setFicheOuverte(ficheOuverte === a.id ? null : a.id)} onDelete={supprimer} />)}
+          {indispo.map(a => <AllieCard key={a.id} alliee={a} disponible={false} ouvert={ficheOuverte === a.id} onClick={() => setFicheOuverte(ficheOuverte === a.id ? null : a.id)} onDelete={supprimer} onEdit={() => setModifierMode(a.id)} modifierMode={modifierMode === a.id} onSaveEdit={(data) => sauvegarderModif(a.id, data)} />)}
         </>
       )}
     </div>

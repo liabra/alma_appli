@@ -12,6 +12,8 @@ export default function WidgetSommeil() {
 
   // Prénom dynamique depuis le store
   const prenom = bebe?.prenom || "Bébé";
+  const sexe = bebe?.sexe || "garcon";
+  const eveille = sexe === "fille" ? "éveillée" : "éveillé";
 
   const sleepTimer = useTimer();
   const eveilTimer = useTimer();
@@ -61,7 +63,7 @@ export default function WidgetSommeil() {
       <button onClick={toggle} style={{ width: "100%", padding: "20px 0", borderRadius: 18, border: `2px solid ${sleeping ? "#7DD8A040" : "rgba(232,201,160,0.25)"}`, background: sleeping ? "linear-gradient(135deg,rgba(125,216,160,0.12),rgba(125,216,160,0.05))" : "linear-gradient(135deg,rgba(232,201,160,0.12),rgba(232,201,160,0.04))", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
         <span style={{ fontSize: 30 }}>{sleeping ? "😴" : "👀"}</span>
         <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 21, fontWeight: 600, color: sleeping ? "#7DD8A0" : "#E8C9A0" }}>
-          {sleeping ? `${prenom} dort` : `${prenom} est éveillé·e`}
+          {sleeping ? `${prenom} dort` : `${prenom} est ${eveille}`}
         </span>
         <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 36, fontWeight: 700, color: "#fff", letterSpacing: "-1px", lineHeight: 1 }}>
           {sleeping ? sleepTimer.fmt : eveilTimer.fmt}

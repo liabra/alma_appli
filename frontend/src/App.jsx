@@ -9,20 +9,18 @@ import Bebe from "./sections/Bebe";
 import Moi from "./sections/Moi";
 import Info from "./sections/Info";
 import Carnet from "./sections/Carnet";
+import Profil from "./sections/Profil";
 import NavBar from "./components/ui/NavBar";
 
 export default function App() {
   const { uuid, initUser, isNewUser } = useUserStore();
-  const { bebe } = useBebeStore();
+  const { getBebe } = useBebeStore();
   useSync();
 
-  useEffect(() => {
-    initUser();
-  }, []);
+  useEffect(() => { initUser(); }, []);
 
-  if (!uuid || isNewUser || !bebe) {
-    return <Onboarding />;
-  }
+  const bebe = getBebe();
+  if (!uuid || isNewUser || !bebe) return <Onboarding />;
 
   return (
     <div style={{ background: "#E8DDD3", minHeight: "100vh" }}>
@@ -32,6 +30,7 @@ export default function App() {
         <Route path="/moi" element={<Moi />} />
         <Route path="/info" element={<Info />} />
         <Route path="/carnet" element={<Carnet />} />
+        <Route path="/profil" element={<Profil />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <NavBar />

@@ -4,15 +4,61 @@ import { persist } from "zustand/middleware";
 export const useBebeStore = create(
   persist(
     (set, get) => ({
-      bebe: null,
+      bebes: [],        // liste de tous les bébés
+      bebeActifId: null, // id du bébé affiché
 
-      setBebe: (bebe) => set({ bebe }),
+      // Bébé actif
+      getBebe: () => {
+        const { bebes, bebeActifId } = get();
+        return bebes.find(b => b.id === bebeActifId) || bebes[0] || null;
+      },
+
+      // Compatibilité ancienne API (bebe unique)
+      get bebe() { return get().getBebe(); },
+
+      ajouterBebe: (data) => {
+        const nouveau = { ...data, id: Date.now() };
+        set(s => ({
+          bebes: [...s.bebes, nouveau],
+          bebeActifId: nouveau.id,
+        }));
+        return nouveau;
+      },
+
+      setBebe: (data) => {
+        // Compatibilité : si un seul bébé existant, on le met à jour
+        const { bebes } = get();
+        if (bebes.length === 0) {
+          const nouveau = { ...data, id: Date.now() };
+          set({ bebes: [nouveau], bebeActifId: nouveau.id });
+        } else {
+          const id = get().bebeActifId || bebes[0].id;
+          set(s => ({ bebes: s.bebes.map(b => b.id === id ? { ...b, ...data } : b) }));
+        }
+      },
+
+      setBebeActif: (id) => set({ bebeActifId: id }),
+
+      supprimerBebe: (id) => {
+        set(s => {
+          const restants = s.bebes.filter(b => b.id !== id);
+          return { bebes: restants, bebeActifId: restants[0]?.id || null };
+        });
+      },
+
+      // Accord grammatical selon le sexe
+      accord: (féminin, masculin) => {
+        const bebe = get().getBebe();
+        return bebe?.sexe === "fille" ? féminin : masculin;
+      },
+
+      // Prénom du bébé actif
+      getPrenom: () => get().getBebe()?.prenom || "Bébé",
 
       getAgeDays: () => {
-        const { bebe } = get();
+        const bebe = get().getBebe();
         if (!bebe?.dateNaissance) return null;
-        const diff = Date.now() - new Date(bebe.dateNaissance).getTime();
-        return Math.floor(diff / (1000 * 60 * 60 * 24));
+        return Math.floor((Date.now() - new Date(bebe.dateNaissance).getTime()) / 86400000);
       },
 
       getAgeLabel: () => {
@@ -29,20 +75,19 @@ export const useBebeStore = create(
         return remMonths > 0 ? `${years} an${years > 1 ? "s" : ""} et ${remMonths} mois` : `${years} an${years > 1 ? "s" : ""}`;
       },
 
-      // Fenêtre de sommeil adaptée à l'âge
       getEveilMaxMinutes: () => {
         const days = get().getAgeDays();
         if (days === null) return 60;
-        if (days < 14)  return 45;   // 0-2 semaines
-        if (days < 30)  return 55;   // 2-4 semaines
-        if (days < 60)  return 75;   // 1-2 mois
-        if (days < 90)  return 90;   // 2-3 mois
-        if (days < 120) return 105;  // 3-4 mois
-        if (days < 180) return 120;  // 4-6 mois
-        if (days < 270) return 150;  // 6-9 mois
-        if (days < 365) return 180;  // 9-12 mois
-        if (days < 540) return 240;  // 12-18 mois
-        return 300;                   // 18 mois+
+        if (days < 14)  return 45;
+        if (days < 30)  return 55;
+        if (days < 60)  return 75;
+        if (days < 90)  return 90;
+        if (days < 120) return 105;
+        if (days < 180) return 120;
+        if (days < 270) return 150;
+        if (days < 365) return 180;
+        if (days < 540) return 240;
+        return 300;
       },
     }),
     { name: "alma_bebe" }

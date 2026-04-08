@@ -61,13 +61,18 @@ function MoodBar({ checkins }) {
       <div style={{ display: "flex", gap: 6, alignItems: "flex-end", height: 80 }}>
         {checkins.map((c, i) => (
           <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-            <div style={{ fontSize: 14 }}>{moodEmojis[c.mood]}</div>
-            <div style={{ width: "100%", borderRadius: 6, background: moodColors[c.mood], height: `${(c.mood + 1) * 12}px`, transition: "height 0.3s" }} />
+            <div style={{ fontSize: 14 }}>{c.mood !== null ? moodEmojis[c.mood] : "·"}</div>
+            <div style={{ width: "100%", borderRadius: 6, background: c.mood !== null ? moodColors[c.mood] : p.linDark, height: c.mood !== null ? `${(c.mood + 1) * 12}px` : "4px", transition: "height 0.3s", opacity: c.mood !== null ? 1 : 0.4 }} />
             <div style={{ fontSize: 9, color: p.textLight, fontWeight: 600 }}>{c.date}</div>
           </div>
         ))}
       </div>
-      <div style={{ fontSize: 11, color: p.textLight, marginTop: 10, fontStyle: "italic" }}>
+      {checkins.every(c => c.mood === null) && (
+        <div style={{ textAlign: "center", fontSize: 12, color: p.textLight, marginTop: 8, fontStyle: "italic" }}>
+          Fais ton premier check-in depuis l'accueil pour voir ta courbe apparaître 🌿
+        </div>
+      )}
+      <div style={{ fontSize: 11, color: p.textLight, marginTop: 6, fontStyle: "italic" }}>
         Basé sur tes check-ins quotidiens · Ceci n'est pas un outil médical
       </div>
     </div>

@@ -2,11 +2,15 @@ import { useState } from "react";
 import { useTimer } from "../../hooks/useTimer";
 import { useSessionStore } from "../../store/useSessionStore";
 import { SIGNAUX_ALLAITEMENT, ALERTES_ALLAITEMENT } from "../../data/allaitement";
+import { useBebeStore } from "../../store/useBebeStore";
 
-const p = { terracotta: "#C4714A", terracottaPale: "#F0D5C5", lin: "#F5EDE3", linDark: "#EDE0D0", sauge: "#6B8F71", text: "#2C2C2C", textLight: "#7A6E66", white: "#FFFAF6" };
+const p = { terracotta: "#C4714A", saugePale: "#C8DBC9", terracottaPale: "#F0D5C5", lin: "#F5EDE3", linDark: "#EDE0D0", sauge: "#6B8F71", text: "#2C2C2C", textLight: "#7A6E66", white: "#FFFAF6" };
 
 export default function WidgetAlimentation() {
-  const { modeAlimentation, setModeAlimentation, getTeteesAujourdhui, addTetee } = useSessionStore();
+  const { modeAlimentation, setModeAlimentation, getTeteesAujourdhui, addTetee, isSectionCachee, toggleSectionCachee } = useSessionStore();
+  const { accord, getPrenom } = useBebeStore();
+  const prenom = getPrenom();
+  const signauxCaches = isSectionCachee("signaux_allaitement");
   const timer = useTimer();
   const [activeSein, setActiveSein] = useState("gauche");
   const [ml, setMl] = useState("90");
@@ -66,16 +70,28 @@ export default function WidgetAlimentation() {
             {timer.running ? "⏹ Terminer la tétée" : "▶ Démarrer"}
           </button>
 
-          {/* Signaux */}
-          <div style={{ fontSize: 11, color: p.textLight, fontWeight: 600, marginBottom: 6 }}>Un souci pendant la tétée ?</div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-            {SIGNAUX_ALLAITEMENT.map((sig) => (
-              <button key={sig.id} onClick={() => toggleSignal(sig.id)}
-                style={{ padding: "5px 10px", borderRadius: 20, border: `1.5px solid ${signauxActifs.includes(sig.id) ? p.terracotta : p.linDark}`, background: signauxActifs.includes(sig.id) ? p.terracottaPale : "transparent", fontSize: 11, fontWeight: 600, color: signauxActifs.includes(sig.id) ? p.terracotta : p.textLight, cursor: "pointer" }}>
-                {sig.label}
-              </button>
-            ))}
+          {/* Signaux — cachables */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+            <div style={{ fontSize: 11, color: p.textLight, fontWeight: 600 }}>Un souci pendant la tétée ?</div>
+            <button onClick={() => toggleSectionCachee("signaux_allaitement")}
+              style={{ fontSize: 10, color: p.textLight, background: "transparent", border: `1px solid ${p.linDark}`, borderRadius: 8, padding: "2px 8px", cursor: "pointer" }}>
+              {signauxCaches ? "Afficher" : "Masquer"}
+            </button>
           </div>
+          {!signauxCaches && (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+              <button onClick={() => setSignauxActifs([])}
+                style={{ padding: "5px 10px", borderRadius: 20, border: `1.5px solid ${signauxActifs.length === 0 ? p.sauge : p.linDark}`, background: signauxActifs.length === 0 ? p.saugePale : "transparent", fontSize: 11, fontWeight: 600, color: signauxActifs.length === 0 ? p.sauge : p.textLight, cursor: "pointer" }}>
+                ✓ Aucun souci
+              </button>
+              {SIGNAUX_ALLAITEMENT.map((sig) => (
+                <button key={sig.id} onClick={() => toggleSignal(sig.id)}
+                  style={{ padding: "5px 10px", borderRadius: 20, border: `1.5px solid ${signauxActifs.includes(sig.id) ? p.terracotta : p.linDark}`, background: signauxActifs.includes(sig.id) ? p.terracottaPale : "transparent", fontSize: 11, fontWeight: 600, color: signauxActifs.includes(sig.id) ? p.terracotta : p.textLight, cursor: "pointer" }}>
+                  {sig.label}
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* Alerte contextuelle */}
           {derniereAlerte && (
