@@ -8,7 +8,6 @@ export const useUserStore = create(
       uuid: null,
       locale: "fr",
       isNewUser: true,
-      isPaid: false,
 
       // Initialise ou récupère l'UUID anonyme
       initUser: () => {
@@ -17,7 +16,6 @@ export const useUserStore = create(
         }
       },
 
-      setIsPaid: (val) => set({ isPaid: val }),
       setIsNewUser: (val) => set({ isNewUser: val }),
     }),
     { name: "alma_user" }
