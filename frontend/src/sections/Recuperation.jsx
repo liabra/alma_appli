@@ -1,9 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useUserStore } from "../store/useUserStore";
-import { useBebeStore } from "../store/useBebeStore";
-import { useSessionStore } from "../store/useSessionStore";
-import { restoreFromCode } from "../hooks/useSync";
+import { isValidRecoveryPhrase } from "../lib/vaultCrypto";
+import { restoreFromPhrase } from "../lib/vaultSync";
 
 const p = {
   terracotta: "#C4714A", terracottaPale: "#F0D5C5",
@@ -13,41 +10,25 @@ const p = {
 };
 
 export default function Recuperation() {
-  const [code, setCode] = useState("");
+  const [phrase, setPhrase] = useState("");
   const [loading, setLoading] = useState(false);
   const [erreur, setErreur] = useState("");
   const [succes, setSucces] = useState(false);
 
-  const { uuid, initUser } = useUserStore();
-  const navigate = useNavigate();
-
-  const handleCode = (val) => {
-    // Formater automatiquement ALMA-XXXX-XXXX
-    const clean = val.toUpperCase().replace(/[^A-Z0-9]/g, "");
-    let formatted = clean;
-    if (clean.length > 4) formatted = "ALMA-" + clean.slice(4, 8);
-    if (clean.length > 8) formatted = "ALMA-" + clean.slice(4, 8) + "-" + clean.slice(8, 12);
-    if (!val.startsWith("ALMA")) formatted = val.toUpperCase();
-    setCode(formatted);
-    setErreur("");
-  };
+  const valide = isValidRecoveryPhrase(phrase);
 
   const restaurer = async () => {
-    if (!code.includes("ALMA")) { setErreur("Le code doit commencer par ALMA-"); return; }
     setLoading(true);
-    const result = await restoreFromCode(code);
-    setLoading(false);
-    if (!result.success) { setErreur(result.error); return; }
-
-    // Restaurer les données dans les stores
-    const { data } = result.data;
-    if (data.bebes) useBebeStore.setState({ bebes: data.bebes, bebeActifId: data.bebeActifId });
-    if (data.session) useSessionStore.setState(data.session);
-    // Mettre à jour l'UUID
-    useUserStore.setState({ uuid: result.data.uuid, isNewUser: false });
-
-    setSucces(true);
-    setTimeout(() => navigate("/"), 2000);
+    setErreur("");
+    try {
+      await restoreFromPhrase(phrase);
+      setSucces(true);
+      // Rechargement complet pour que les stores relisent les données restaurées
+      setTimeout(() => { window.location.href = "/"; }, 1500);
+    } catch (e) {
+      setErreur(String(e?.message || e));
+      setLoading(false);
+    }
   };
 
   return (
@@ -62,41 +43,35 @@ export default function Recuperation() {
       ) : (
         <>
           <div style={{ fontSize: 48, marginBottom: 16 }}>🔑</div>
-          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 28, fontWeight: 600, color: p.text, textAlign: "center", marginBottom: 8 }}>Restaurer mon compte</div>
-          <div style={{ fontSize: 14, color: p.textLight, textAlign: "center", lineHeight: 1.6, marginBottom: 32 }}>
-            Entre ton code de récupération Alma pour retrouver toutes tes données.
+          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 28, fontWeight: 600, color: p.text, textAlign: "center", marginBottom: 8 }}>Restaurer mes données</div>
+          <div style={{ fontSize: 14, color: p.textLight, textAlign: "center", lineHeight: 1.6, marginBottom: 24 }}>
+            Saisis ou colle les 12 mots de ta phrase de récupération, dans l'ordre.
           </div>
 
-          {/* PATCH SÉCURITÉ : restauration depuis un code masquée temporairement
           <div style={{ width: "100%", marginBottom: 12 }}>
-            <input
-              type="text"
-              value={code}
-              onChange={e => handleCode(e.target.value)}
-              placeholder="ALMA-XXXX-XXXX"
-              maxLength={14}
-              style={{ width: "100%", padding: "16px", borderRadius: 14, border: `2px solid ${erreur ? "#C04040" : p.linDark}`, background: p.white, fontSize: 20, fontFamily: "'Cormorant Garamond', serif", fontWeight: 700, textAlign: "center", letterSpacing: "2px", outline: "none", color: p.text }}
+            <textarea
+              value={phrase}
+              onChange={e => { setPhrase(e.target.value); setErreur(""); }}
+              placeholder="mot1 mot2 mot3 …"
+              rows={4}
+              style={{ width: "100%", padding: "14px", borderRadius: 14, border: `2px solid ${erreur ? "#C04040" : p.linDark}`, background: p.white, fontSize: 16, fontFamily: "'DM Sans', sans-serif", outline: "none", color: p.text, resize: "vertical", boxSizing: "border-box" }}
             />
             {erreur && <div style={{ fontSize: 12, color: "#C04040", marginTop: 6, textAlign: "center" }}>{erreur}</div>}
           </div>
 
-          <button onClick={restaurer} disabled={loading || code.length < 12}
-            style={{ width: "100%", padding: "14px 0", borderRadius: 14, border: "none", background: (!loading && code.length >= 12) ? p.terracotta : p.linDark, color: "#fff", fontSize: 15, fontWeight: 700, cursor: (!loading && code.length >= 12) ? "pointer" : "default", marginBottom: 16 }}>
-            {loading ? "Recherche en cours..." : "Restaurer mes données"}
-          </button>
-          */}
-          <div style={{ width: "100%", padding: "16px", borderRadius: 14, background: p.white, border: `1px solid ${p.linDark}`, fontSize: 14, color: p.textLight, textAlign: "center", fontStyle: "italic", marginBottom: 16 }}>
-            Sauvegarde cloud en cours de refonte sécurisée
+          <div style={{ width: "100%", padding: "12px 14px", background: p.terracottaPale, borderRadius: 12, fontSize: 12, color: p.text, lineHeight: 1.6, marginBottom: 16 }}>
+            ⚠️ La restauration remplacera les données actuellement sur cet appareil par celles de ta sauvegarde.
           </div>
 
-          <button onClick={() => navigate("/")}
+          <button onClick={restaurer} disabled={loading || !valide}
+            style={{ width: "100%", padding: "14px 0", borderRadius: 14, border: "none", background: (!loading && valide) ? p.terracotta : p.linDark, color: "#fff", fontSize: 15, fontWeight: 700, cursor: (!loading && valide) ? "pointer" : "default", marginBottom: 16 }}>
+            {loading ? "Restauration en cours..." : "Restaurer mes données"}
+          </button>
+
+          <button onClick={() => { window.location.href = "/"; }}
             style={{ fontSize: 13, color: p.textLight, background: "transparent", border: "none", cursor: "pointer", textDecoration: "underline" }}>
             Créer un nouveau compte
           </button>
-
-          <div style={{ marginTop: 24, padding: "14px 16px", background: p.white, borderRadius: 14, border: `1px solid ${p.linDark}`, fontSize: 12, color: p.textLight, lineHeight: 1.6, textAlign: "center" }}>
-            💡 Ton code de récupération est disponible dans <strong>Profil → Compte anonyme</strong>. Note-le ou prends-en une photo.
-          </div>
         </>
       )}
     </div>
