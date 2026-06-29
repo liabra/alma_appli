@@ -2,7 +2,8 @@ import { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useUserStore } from "./store/useUserStore";
 import { useBebeStore } from "./store/useBebeStore";
-import { useSync } from "./hooks/useSync";
+// PATCH SÉCURITÉ : sync cloud désactivée temporairement (offline-first)
+// import { useSync } from "./hooks/useSync";
 import Onboarding from "./sections/Onboarding";
 import Dashboard from "./sections/Dashboard";
 import Bebe from "./sections/Bebe";
@@ -17,7 +18,8 @@ import NavBar from "./components/ui/NavBar";
 export default function App() {
   const { uuid, initUser, isNewUser } = useUserStore();
   const { getBebe } = useBebeStore();
-  useSync();
+  // PATCH SÉCURITÉ : aucun push automatique vers le serveur
+  // useSync();
 
   useEffect(() => { initUser(); }, []);
 

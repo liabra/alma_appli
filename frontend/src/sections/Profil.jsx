@@ -156,6 +156,7 @@ export default function Profil() {
             <div style={{ fontSize: 12, color: p.textLight, lineHeight: 1.5, marginBottom: 10 }}>
               Si tu changes de téléphone, note ce code. Il te permettra de retrouver toutes tes données.
             </div>
+            {/* PATCH SÉCURITÉ : code de récupération masqué temporairement
             {recoveryCode ? (
               <>
                 <div style={{ fontSize: 22, fontWeight: 700, color: p.text, fontFamily: "'Cormorant Garamond', serif", letterSpacing: "2px", textAlign: "center", padding: "10px", background: p.white, borderRadius: 10, marginBottom: 8, border: `2px solid ${p.terracottaPale}` }}>
@@ -171,6 +172,10 @@ export default function Profil() {
                 {loadingCode ? "Génération..." : "Afficher mon code de récupération"}
               </button>
             )}
+            */}
+            <div style={{ fontSize: 12, color: p.textLight, textAlign: "center", fontStyle: "italic", padding: "8px 0" }}>
+              Sauvegarde cloud en cours de refonte sécurisée
+            </div>
           </div>
 
           <div style={{ fontSize: 11, color: p.textLight, fontFamily: "monospace", background: p.lin, padding: "8px 12px", borderRadius: 8, wordBreak: "break-all" }}>

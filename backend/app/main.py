@@ -18,7 +18,12 @@ async def lifespan(app: FastAPI):
         logger.warning(f"⚠️ DB init warning: {e}")
     yield
 
-app = FastAPI(title="Alma API", version="1.1.0", lifespan=lifespan)
+# PATCH SÉCURITÉ : doc d'API fermée en production
+_docs_kwargs = {}
+if settings.ENVIRONMENT == "production":
+    _docs_kwargs = {"docs_url": None, "redoc_url": None, "openapi_url": None}
+
+app = FastAPI(title="Alma API", version="1.1.0", lifespan=lifespan, **_docs_kwargs)
 
 origins = [o.strip() for o in settings.CORS_ORIGINS.split(",")]
 app.add_middleware(
@@ -29,12 +34,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(auth.router)
-app.include_router(bebe.router)
-app.include_router(checkin.router)
-app.include_router(encouragement.router)
-app.include_router(share.router)
-app.include_router(sync.router)
+# PATCH SÉCURITÉ : routers désactivés temporairement (refonte sécurisée)
+# app.include_router(auth.router)
+# app.include_router(bebe.router)
+# app.include_router(checkin.router)
+# app.include_router(encouragement.router)
+# app.include_router(share.router)
+# app.include_router(sync.router)
 
 @app.get("/health")
 def health():

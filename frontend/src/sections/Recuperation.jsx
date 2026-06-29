@@ -67,6 +67,7 @@ export default function Recuperation() {
             Entre ton code de récupération Alma pour retrouver toutes tes données.
           </div>
 
+          {/* PATCH SÉCURITÉ : restauration depuis un code masquée temporairement
           <div style={{ width: "100%", marginBottom: 12 }}>
             <input
               type="text"
@@ -83,6 +84,10 @@ export default function Recuperation() {
             style={{ width: "100%", padding: "14px 0", borderRadius: 14, border: "none", background: (!loading && code.length >= 12) ? p.terracotta : p.linDark, color: "#fff", fontSize: 15, fontWeight: 700, cursor: (!loading && code.length >= 12) ? "pointer" : "default", marginBottom: 16 }}>
             {loading ? "Recherche en cours..." : "Restaurer mes données"}
           </button>
+          */}
+          <div style={{ width: "100%", padding: "16px", borderRadius: 14, background: p.white, border: `1px solid ${p.linDark}`, fontSize: 14, color: p.textLight, textAlign: "center", fontStyle: "italic", marginBottom: 16 }}>
+            Sauvegarde cloud en cours de refonte sécurisée
+          </div>
 
           <button onClick={() => navigate("/")}
             style={{ fontSize: 13, color: p.textLight, background: "transparent", border: "none", cursor: "pointer", textDecoration: "underline" }}>
