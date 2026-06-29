@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from app.core.config import settings
 from app.core.database import create_db_and_tables
-from app.routers import auth, bebe, checkin, encouragement, share, sync
+from app.routers import vault
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -29,18 +29,12 @@ origins = [o.strip() for o in settings.CORS_ORIGINS.split(",")]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_credentials=False,
+    allow_methods=["GET", "PUT", "POST", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type"],
 )
 
-# PATCH SÉCURITÉ : routers désactivés temporairement (refonte sécurisée)
-# app.include_router(auth.router)
-# app.include_router(bebe.router)
-# app.include_router(checkin.router)
-# app.include_router(encouragement.router)
-# app.include_router(share.router)
-# app.include_router(sync.router)
+app.include_router(vault.router)
 
 @app.get("/health")
 def health():

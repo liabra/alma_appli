@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str = ""
     CORS_ORIGINS: str = "http://localhost:5173,http://localhost:3000"
     ENVIRONMENT: str = "development"
+    MAX_BLOB_BYTES: int = 2_000_000
 
     class Config:
         env_file = ".env"
