@@ -40,7 +40,11 @@ export async function deriveSecrets(phrase) {
   const encRaw = await hkdf(seed, 'alma-enc-v1', 32);
   const authRaw = await hkdf(seed, 'alma-auth-v1', 32);
   const encKey = await crypto.subtle.importKey('raw', encRaw, { name: 'AES-GCM' }, false, ['encrypt', 'decrypt']);
-  return { encKey, authToken: toB64url(authRaw) };
+  return { encKey, encKeyB64: toB64(encRaw), authToken: toB64url(authRaw) };
+}
+
+export async function importEncKey(b64) {
+  return crypto.subtle.importKey('raw', fromB64(b64), { name: 'AES-GCM' }, false, ['encrypt', 'decrypt']);
 }
 
 // Objet JSON -> blob base64 (IV 12 octets préfixé). Le serveur ne voit que ce charabia.

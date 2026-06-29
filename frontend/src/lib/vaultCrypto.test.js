@@ -3,7 +3,7 @@ import { webcrypto } from 'node:crypto';
 if (!globalThis.crypto) globalThis.crypto = webcrypto;
 import {
   generateRecoveryPhrase, isValidRecoveryPhrase,
-  deriveSecrets, encryptJSON, decryptJSON,
+  deriveSecrets, importEncKey, encryptJSON, decryptJSON,
 } from './vaultCrypto.js';
 
 describe('vaultCrypto', () => {
@@ -34,5 +34,13 @@ describe('vaultCrypto', () => {
     const b = await deriveSecrets(generateRecoveryPhrase());
     const blob = await encryptJSON({ x: 1 }, a.encKey);
     await expect(decryptJSON(blob, b.encKey)).rejects.toBeTruthy();
+  });
+  it('importEncKey(encKeyB64) déchiffre ce que encKey a chiffré', async () => {
+    const p = generateRecoveryPhrase();
+    const { encKey, encKeyB64 } = await deriveSecrets(p);
+    const obj = { tetees: [1, 2, 3], note: 'éàü', n: 42 };
+    const blob = await encryptJSON(obj, encKey);
+    const reKey = await importEncKey(encKeyB64);
+    expect(await decryptJSON(blob, reKey)).toEqual(obj);
   });
 });
