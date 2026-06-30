@@ -41,6 +41,7 @@ export default function App() {
   // Attendre le premier rendu (les stores persistés sont réhydratés de façon synchrone)
   if (!ready) return null;
 
+  console.log("DECISION ONBOARDING:", { ready, uuid, isNewUser, bebesLen: bebes?.length, bebeActifId, bebe });
   if (!uuid || isNewUser || !bebe) return <Onboarding />;
 
   return (
