@@ -6,6 +6,9 @@ export const useBebeStore = create(
     (set, get) => ({
       bebes: [],        // liste de tous les bébés
       bebeActifId: null, // id du bébé affiché
+      hasHydrated: false,
+
+      setHasHydrated: (v) => set({ hasHydrated: v }),
 
       // Bébé actif
       getBebe: () => {
@@ -90,6 +93,9 @@ export const useBebeStore = create(
         return 300;
       },
     }),
-    { name: "alma_bebe" }
+    {
+      name: "alma_bebe",
+      onRehydrateStorage: () => (state) => { state?.setHasHydrated(true); },
+    }
   )
 );

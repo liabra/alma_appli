@@ -19,6 +19,8 @@ import NavBar from "./components/ui/NavBar";
 export default function App() {
   const { uuid, initUser, isNewUser } = useUserStore();
   const { getBebe } = useBebeStore();
+  const userHydrated = useUserStore((s) => s.hasHydrated);
+  const bebeHydrated = useBebeStore((s) => s.hasHydrated);
   // PATCH SÉCURITÉ : aucun push automatique vers le serveur
   // useSync();
 
@@ -30,6 +32,9 @@ export default function App() {
   if (window.location.pathname === "/recuperation") {
     return <Routes><Route path="/recuperation" element={<Recuperation />} /></Routes>;
   }
+
+  // Attendre la réhydratation des stores persistés avant de décider de l'onboarding
+  if (!userHydrated || !bebeHydrated) return null;
 
   if (!uuid || isNewUser || !bebe) return <Onboarding />;
 
