@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useUserStore } from "./store/useUserStore";
 import { useBebeStore } from "./store/useBebeStore";
@@ -19,10 +19,11 @@ import NavBar from "./components/ui/NavBar";
 export default function App() {
   const { uuid, initUser, isNewUser } = useUserStore();
   const { getBebe } = useBebeStore();
-  const userHydrated = useUserStore((s) => s.hasHydrated);
-  const bebeHydrated = useBebeStore((s) => s.hasHydrated);
   // PATCH SÉCURITÉ : aucun push automatique vers le serveur
   // useSync();
+
+  const [ready, setReady] = useState(false);
+  useEffect(() => { setReady(true); }, []);
 
   useEffect(() => { initUser(); }, []);
   useBackupSync();
@@ -33,8 +34,8 @@ export default function App() {
     return <Routes><Route path="/recuperation" element={<Recuperation />} /></Routes>;
   }
 
-  // Attendre la réhydratation des stores persistés avant de décider de l'onboarding
-  if (!userHydrated || !bebeHydrated) return null;
+  // Attendre le premier rendu (les stores persistés sont réhydratés de façon synchrone)
+  if (!ready) return null;
 
   if (!uuid || isNewUser || !bebe) return <Onboarding />;
 

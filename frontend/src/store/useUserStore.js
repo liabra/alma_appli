@@ -8,7 +8,6 @@ export const useUserStore = create(
       uuid: null,
       locale: "fr",
       isNewUser: true,
-      hasHydrated: false,
 
       // Initialise ou récupère l'UUID anonyme
       initUser: () => {
@@ -18,11 +17,7 @@ export const useUserStore = create(
       },
 
       setIsNewUser: (val) => set({ isNewUser: val }),
-      setHasHydrated: (v) => set({ hasHydrated: v }),
     }),
-    {
-      name: "alma_user",
-      onRehydrateStorage: () => (state) => { state?.setHasHydrated(true); },
-    }
+    { name: "alma_user" }
   )
 );
