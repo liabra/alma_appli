@@ -18,7 +18,9 @@ import NavBar from "./components/ui/NavBar";
 
 export default function App() {
   const { uuid, initUser, isNewUser } = useUserStore();
-  const { getBebe } = useBebeStore();
+  const bebes = useBebeStore((s) => s.bebes);
+  const bebeActifId = useBebeStore((s) => s.bebeActifId);
+  const getBebe = useBebeStore((s) => s.getBebe);
   // PATCH SÉCURITÉ : aucun push automatique vers le serveur
   // useSync();
 
@@ -28,7 +30,9 @@ export default function App() {
   useEffect(() => { initUser(); }, []);
   useBackupSync();
 
-  const bebe = getBebe();
+  const bebe = bebes && bebes.length > 0
+    ? (bebes.find((b) => b.id === bebeActifId) || bebes[0])
+    : null;
 
   if (window.location.pathname === "/recuperation") {
     return <Routes><Route path="/recuperation" element={<Recuperation />} /></Routes>;

@@ -60,6 +60,23 @@ export async function restoreFromPhrase(phrase) {
   const encKey = await importEncKey(encKeyB64);
   const bundle = await decryptJSON(remote.blob, encKey);
   applyBundle(bundle);
+  // Garantit un bebeActifId cohérent dans alma_bebe (sinon getBebe peut renvoyer null)
+  try {
+    const raw = localStorage.getItem('alma_bebe');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      const state = parsed?.state;
+      if (state && Array.isArray(state.bebes) && state.bebes.length > 0) {
+        const exists = state.bebes.some((b) => String(b.id) === String(state.bebeActifId));
+        if (!exists) {
+          state.bebeActifId = state.bebes[0].id;
+          localStorage.setItem('alma_bebe', JSON.stringify(parsed));
+        }
+      }
+    }
+  } catch {
+    // structure inattendue : on n'altère rien
+  }
   const st = useBackupStore.getState();
   st.setSecrets({ authToken, encKeyB64 });
   st.setEnabled(true);

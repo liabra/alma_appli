@@ -10,7 +10,8 @@ export const useBebeStore = create(
       // Bébé actif
       getBebe: () => {
         const { bebes, bebeActifId } = get();
-        return bebes.find(b => b.id === bebeActifId) || bebes[0] || null;
+        if (!bebes || bebes.length === 0) return null;
+        return bebes.find((b) => String(b.id) === String(bebeActifId)) || bebes[0];
       },
 
       // Compatibilité ancienne API (bebe unique)
