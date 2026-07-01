@@ -83,3 +83,21 @@ export async function restoreFromPhrase(phrase) {
   st.setSynced({ version: remote.version, at: new Date().toISOString() });
   // Le composant appelant devra recharger la page pour que les stores relisent localStorage.
 }
+
+export async function debugInspectVault() {
+  const s = useBackupStore.getState();
+  if (!s.enabled || !s.authToken || !s.encKeyB64) { console.log("Sauvegarde non activée sur cet appareil"); return; }
+  const remote = await pullVault(s.authToken);
+  if (!remote || !remote.blob) { console.log("Coffre vide ou inexistant"); return; }
+  const encKey = await importEncKey(s.encKeyB64);
+  const bundle = await decryptJSON(remote.blob, encKey);
+  const bebes = bundle?.alma_bebe?.state?.bebes;
+  console.log("VAULT CONTENT:", {
+    version: remote.version,
+    alma_bebe_bebesLen: Array.isArray(bebes) ? bebes.length : "absent",
+    alma_user_isNewUser: bundle?.alma_user?.state?.isNewUser,
+    alma_user_uuid: bundle?.alma_user?.state?.uuid,
+    keys: Object.keys(bundle || {}),
+  });
+  return bundle;
+}

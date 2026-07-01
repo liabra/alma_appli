@@ -5,6 +5,7 @@ import { useBebeStore } from "./store/useBebeStore";
 // PATCH SÉCURITÉ : sync cloud désactivée temporairement (offline-first)
 // import { useSync } from "./hooks/useSync";
 import { useBackupSync } from "./hooks/useBackupSync";
+import { debugInspectVault } from "./lib/vaultSync";
 import Onboarding from "./sections/Onboarding";
 import Dashboard from "./sections/Dashboard";
 import Bebe from "./sections/Bebe";
@@ -28,6 +29,7 @@ export default function App() {
   useEffect(() => { setReady(true); }, []);
 
   useEffect(() => { initUser(); }, []);
+  useEffect(() => { window.__debugVault = debugInspectVault; }, []);
   useBackupSync();
 
   const bebe = bebes && bebes.length > 0
