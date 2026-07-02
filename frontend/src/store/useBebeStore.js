@@ -14,9 +14,6 @@ export const useBebeStore = create(
         return bebes.find((b) => String(b.id) === String(bebeActifId)) || bebes[0];
       },
 
-      // Compatibilité ancienne API (bebe unique)
-      get bebe() { return get().getBebe(); },
-
       ajouterBebe: (data) => {
         const nouveau = { ...data, id: Date.now() };
         set(s => ({
