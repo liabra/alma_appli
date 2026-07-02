@@ -14,6 +14,7 @@ import { getArticlesPourAge } from "../data/articlesAge";
 import { useNavigate } from "react-router-dom";
 import WidgetAlimentation from "../components/widgets/WidgetAlimentation";
 import WidgetCouches from "../components/widgets/WidgetCouches";
+import WidgetPleurs from "../components/widgets/WidgetPleurs";
 import WidgetSommeil from "../components/widgets/WidgetSommeil";
 import WidgetSante from "../components/widgets/WidgetSante";
 import WidgetSoutien from "../components/widgets/WidgetSoutien";
@@ -25,6 +26,7 @@ const WIDGET_DEFS = [
   { id: "sommeil", label: "Sommeil", emoji: "🌙" },
   { id: "sante", label: "Santé", emoji: "🌡" },
   { id: "soutien", label: "Réseau soutien", emoji: "💬" },
+  { id: "pleurs", label: "Pleurs", emoji: "😢" },
 ];
 
 function SortableWidget({ id, editMode, onHide, children }) {
@@ -82,22 +84,28 @@ export default function Dashboard() {
 
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }));
 
+  // widgetOrder étant persisté, les widgets ajoutés après coup (ex. "pleurs") en sont
+  // absents chez les utilisateurs existants : on les ajoute à la suite.
+  const extraWidgets = WIDGET_DEFS.map(w => w.id).filter(id => !widgetOrder.includes(id));
+  const fullOrder = [...widgetOrder, ...extraWidgets];
+
   const handleDragEnd = (event) => {
     const { active, over } = event;
     if (active.id !== over?.id) {
-      const oldIndex = widgetOrder.indexOf(active.id);
-      const newIndex = widgetOrder.indexOf(over.id);
-      setWidgetOrder(arrayMove(widgetOrder, oldIndex, newIndex));
+      const oldIndex = fullOrder.indexOf(active.id);
+      const newIndex = fullOrder.indexOf(over.id);
+      setWidgetOrder(arrayMove(fullOrder, oldIndex, newIndex));
     }
   };
 
-  const visibleWidgets = widgetOrder.filter(id => !hiddenWidgets.includes(id));
+  const visibleWidgets = fullOrder.filter(id => !hiddenWidgets.includes(id));
   const masques = hiddenWidgets.filter(id => WIDGET_DEFS.find(w => w.id === id));
 
   const renderWidget = (id) => {
     switch (id) {
       case "alimentation": return <WidgetAlimentation />;
       case "couches": return <WidgetCouches />;
+      case "pleurs": return <WidgetPleurs />;
       case "sommeil": return <WidgetSommeil />;
       case "sante": return <WidgetSante />;
       case "soutien": return <WidgetSoutien />;

@@ -63,6 +63,33 @@ export const useSessionStore = create(
         return get().couches.filter(c => new Date(c.timestamp).toDateString() === today);
       },
 
+      // ─── PLEURS ──────────────────────────────────────────────────
+      pleurs: [],
+      pleursEnCours: null,                 // timestamp de début si épisode en cours
+
+      startPleurs: () => set({ pleursEnCours: Date.now() }),
+
+      stopPleurs: () => {
+        const debut = get().pleursEnCours;
+        if (!debut) return;
+        set(s => ({
+          pleurs: [...s.pleurs, { id: Date.now(), debut, fin: Date.now() }],
+          pleursEnCours: null,
+        }));
+      },
+
+      annulerPleursEnCours: () => set({ pleursEnCours: null }),
+
+      addPleursManuel: (dureeMin) =>       // saisie rétroactive : "il a pleuré ~X min"
+        set(s => ({ pleurs: [...s.pleurs, { id: Date.now(), debut: Date.now() - dureeMin * 60000, fin: Date.now() }] })),
+
+      supprimerDernierPleurs: () => set(s => ({ pleurs: s.pleurs.slice(0, -1) })),
+
+      getPleursAujourdhui: () => {
+        const today = new Date().toDateString();
+        return get().pleurs.filter(pl => new Date(pl.debut).toDateString() === today);
+      },
+
       // ─── TEMPERATURE ─────────────────────────────────────────────
       temperatures: [],
 
@@ -112,7 +139,7 @@ export const useSessionStore = create(
         set(s => ({ alliees: s.alliees.filter(a => a.id !== id) })),
 
       // ─── DASHBOARD CONFIG ─────────────────────────────────────────
-      widgetOrder: ["alimentation", "soutien", "couches", "sommeil", "sante"],
+      widgetOrder: ["alimentation", "soutien", "couches", "sommeil", "sante", "pleurs"],
       hiddenWidgets: [],
 
       setWidgetOrder: (order) => set({ widgetOrder: order }),
@@ -146,6 +173,8 @@ export const useSessionStore = create(
         periodesSommeil: state.periodesSommeil,
         sommeilEnCours: state.sommeilEnCours,
         couches: state.couches,
+        pleurs: state.pleurs,
+        pleursEnCours: state.pleursEnCours,
         temperatures: state.temperatures,
         checkins: state.checkins,
         alliees: state.alliees,
