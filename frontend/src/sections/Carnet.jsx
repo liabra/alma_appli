@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Header from "../components/ui/Header";
 import { useBebeStore } from "../store/useBebeStore";
+import CarnetSoins from "../components/carnet/CarnetSoins";
 
 const p = {
   terracotta: "#C4714A", terracottaL: "#D4876A", terracottaPale: "#F0D5C5",
@@ -195,11 +196,12 @@ function OngletDemarches() {
 }
 
 export default function Carnet() {
-  const [onglet, setOnglet] = useState("rdv");
+  const [onglet, setOnglet] = useState("soins");
   const { getBebe } = useBebeStore();
   const bebe = getBebe();
 
   const onglets = [
+    { id: "soins", label: "🩹 Soins" },
     { id: "rdv", label: "📅 Rendez-vous" },
     { id: "notes", label: "📝 Notes" },
     { id: "demarches", label: "📋 Démarches" },
@@ -220,6 +222,7 @@ export default function Carnet() {
             </button>
           ))}
         </div>
+        {onglet === "soins" && <CarnetSoins />}
         {onglet === "rdv" && <OngletRendezVous bebe={bebe} />}
         {onglet === "notes" && <OngletNotes />}
         {onglet === "demarches" && <OngletDemarches />}
