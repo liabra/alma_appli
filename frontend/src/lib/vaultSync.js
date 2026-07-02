@@ -3,10 +3,11 @@ import { useUserStore } from '../store/useUserStore';
 import { useBebeStore } from '../store/useBebeStore';
 import { useSessionStore } from '../store/useSessionStore';
 import { useShareStore } from '../store/useShareStore';
+import { useCarnetStore } from '../store/useCarnetStore';
 import { deriveSecrets, importEncKey, encryptJSON, decryptJSON } from './vaultCrypto';
 import { initVault, pullVault, pushVault } from './vaultClient';
 
-const LOCAL_KEYS = ['alma_user', 'alma_bebe', 'alma_session', 'alma_share'];
+const LOCAL_KEYS = ['alma_user', 'alma_bebe', 'alma_session', 'alma_share', 'alma_carnet'];
 
 export function bundleLocalData() {
   const out = {};
@@ -93,6 +94,11 @@ export async function restoreFromPhrase(phrase) {
   if (ss) useSessionStore.setState(ss);
   const sh = bundle?.alma_share?.state;
   if (sh) useShareStore.setState(sh);
+  const ca = bundle?.alma_carnet?.state;
+  if (ca) useCarnetStore.setState({
+    entries: Array.isArray(ca.entries) ? ca.entries : [],
+    prises: Array.isArray(ca.prises) ? ca.prises : [],
+  });
   const st = useBackupStore.getState();
   st.setSecrets({ authToken, encKeyB64 });
   st.setEnabled(true);
