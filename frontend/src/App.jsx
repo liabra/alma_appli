@@ -2,10 +2,7 @@ import { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useUserStore } from "./store/useUserStore";
 import { useBebeStore } from "./store/useBebeStore";
-// PATCH SÉCURITÉ : sync cloud désactivée temporairement (offline-first)
-// import { useSync } from "./hooks/useSync";
 import { useBackupSync } from "./hooks/useBackupSync";
-import { debugInspectVault } from "./lib/vaultSync";
 import Onboarding from "./sections/Onboarding";
 import Dashboard from "./sections/Dashboard";
 import Bebe from "./sections/Bebe";
@@ -18,22 +15,15 @@ import Alertes from "./sections/Alertes";
 import NavBar from "./components/ui/NavBar";
 
 export default function App() {
-  try {
-    const _b = JSON.parse(localStorage.getItem('alma_bebe') || 'null');
-    console.log('APP MOUNT localStorage alma_bebe -> bebes:', _b?.state?.bebes?.length);
-  } catch (_) {}
   const { uuid, initUser, isNewUser } = useUserStore();
   const bebes = useBebeStore((s) => s.bebes);
   const bebeActifId = useBebeStore((s) => s.bebeActifId);
   const getBebe = useBebeStore((s) => s.getBebe);
-  // PATCH SÉCURITÉ : aucun push automatique vers le serveur
-  // useSync();
 
   const [ready, setReady] = useState(false);
   useEffect(() => { setReady(true); }, []);
 
   useEffect(() => { initUser(); }, []);
-  useEffect(() => { window.__debugVault = debugInspectVault; }, []);
   useBackupSync();
 
   const bebe = bebes && bebes.length > 0
@@ -47,7 +37,6 @@ export default function App() {
   // Attendre le premier rendu (les stores persistés sont réhydratés de façon synchrone)
   if (!ready) return null;
 
-  console.log("DECISION ONBOARDING:", { ready, uuid, isNewUser, bebesLen: bebes?.length, bebeActifId, bebe });
   if (!uuid || isNewUser || !bebe) return <Onboarding />;
 
   return (
