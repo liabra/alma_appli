@@ -91,6 +91,6 @@ export const useBebeStore = create(
         return 300;
       },
     }),
-    { name: "alma_bebe" }
+    { name: "alma_bebe", partialize: (s) => ({ bebes: s.bebes, bebeActifId: s.bebeActifId }) }
   )
 );

@@ -1,4 +1,8 @@
 import { useBackupStore } from '../store/useBackupStore';
+import { useUserStore } from '../store/useUserStore';
+import { useBebeStore } from '../store/useBebeStore';
+import { useSessionStore } from '../store/useSessionStore';
+import { useShareStore } from '../store/useShareStore';
 import { deriveSecrets, importEncKey, encryptJSON, decryptJSON } from './vaultCrypto';
 import { initVault, pullVault, pushVault } from './vaultClient';
 
@@ -81,6 +85,18 @@ export async function restoreFromPhrase(phrase) {
     const chk = JSON.parse(localStorage.getItem('alma_bebe') || 'null');
     console.log('RESTORE a écrit alma_bebe -> bebes:', chk?.state?.bebes?.length);
   } catch (e) { console.log('RESTORE check err', e); }
+  // Hydrate directement les stores en mémoire (persist réécrira un localStorage propre)
+  const bb = bundle?.alma_bebe?.state;
+  if (bb) useBebeStore.setState({
+    bebes: Array.isArray(bb.bebes) ? bb.bebes : [],
+    bebeActifId: bb.bebeActifId ?? (bb.bebes?.[0]?.id ?? null),
+  });
+  const uu = bundle?.alma_user?.state;
+  if (uu) useUserStore.setState({ uuid: uu.uuid, locale: uu.locale || 'fr', isNewUser: false });
+  const ss = bundle?.alma_session?.state;
+  if (ss) useSessionStore.setState(ss);
+  const sh = bundle?.alma_share?.state;
+  if (sh) useShareStore.setState(sh);
   const st = useBackupStore.getState();
   st.setSecrets({ authToken, encKeyB64 });
   st.setEnabled(true);

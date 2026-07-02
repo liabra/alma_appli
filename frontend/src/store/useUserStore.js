@@ -18,6 +18,6 @@ export const useUserStore = create(
 
       setIsNewUser: (val) => set({ isNewUser: val }),
     }),
-    { name: "alma_user" }
+    { name: "alma_user", partialize: (s) => ({ uuid: s.uuid, locale: s.locale, isNewUser: s.isNewUser }) }
   )
 );
