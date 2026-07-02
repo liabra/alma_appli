@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useBebeStore } from "../store/useBebeStore";
 import { useSessionStore } from "../store/useSessionStore";
 import Header from "../components/ui/Header";
+import Historique from "../components/historique/Historique";
 
 const p = {
   terracotta: "#C4714A", terracottaL: "#D4876A", terracottaPale: "#F0D5C5",
@@ -265,6 +266,7 @@ export default function Bebe() {
     { id: "croissance", label: "📈 Croissance" },
     { id: "vaccins", label: "💉 Vaccins" },
     { id: "developpement", label: "🌱 Éveil" },
+    { id: "historique", label: "📊 Historique" },
   ];
 
   return (
@@ -288,6 +290,7 @@ export default function Bebe() {
         {onglet === "croissance" && <OngletCroissance bebe={bebe} />}
         {onglet === "vaccins" && <OngletVaccins bebe={bebe} />}
         {onglet === "developpement" && <OngletDeveloppement bebe={bebe} />}
+        {onglet === "historique" && <Historique />}
       </div>
     </div>
   );

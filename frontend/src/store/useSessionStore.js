@@ -14,6 +14,9 @@ export const useSessionStore = create(
       supprimerDerniereTetee: () =>
         set(s => ({ tetees: s.tetees.slice(0, -1) })),
 
+      supprimerTetee: (id) =>
+        set(s => ({ tetees: s.tetees.filter(t => t.id !== id) })),
+
       setModeAlimentation: (mode) => set({ modeAlimentation: mode }),
 
       getTeteesAujourdhui: () => {
@@ -58,6 +61,9 @@ export const useSessionStore = create(
       supprimerDerniereCouche: () =>
         set(s => ({ couches: s.couches.slice(0, -1) })),
 
+      supprimerCouche: (id) =>
+        set(s => ({ couches: s.couches.filter(c => c.id !== id) })),
+
       getCouchesAujourdhui: () => {
         const today = new Date().toDateString();
         return get().couches.filter(c => new Date(c.timestamp).toDateString() === today);
@@ -84,6 +90,8 @@ export const useSessionStore = create(
         set(s => ({ pleurs: [...s.pleurs, { id: Date.now(), debut: Date.now() - dureeMin * 60000, fin: Date.now() }] })),
 
       supprimerDernierPleurs: () => set(s => ({ pleurs: s.pleurs.slice(0, -1) })),
+
+      supprimerPleurs: (id) => set(s => ({ pleurs: s.pleurs.filter(pl => pl.id !== id) })),
 
       getPleursAujourdhui: () => {
         const today = new Date().toDateString();
