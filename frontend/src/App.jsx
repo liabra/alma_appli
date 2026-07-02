@@ -18,7 +18,6 @@ export default function App() {
   const { uuid, initUser, isNewUser } = useUserStore();
   const bebes = useBebeStore((s) => s.bebes);
   const bebeActifId = useBebeStore((s) => s.bebeActifId);
-  const getBebe = useBebeStore((s) => s.getBebe);
 
   const [ready, setReady] = useState(false);
   useEffect(() => { setReady(true); }, []);

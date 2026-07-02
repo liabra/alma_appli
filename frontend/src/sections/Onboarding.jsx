@@ -60,12 +60,15 @@ export default function Onboarding() {
 
           <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: 10, marginBottom: 28 }}>
             {[
-              { icon: "🤱", titre: "Ce qu'Alma fait", items: ["Suit l'alimentation, le sommeil et les couches de bébé", "T'accompagne dans le post-partum (corps, mental, nutrition)", "Te donne accès à une bibliothèque de fiches physiologiques", "Garde un œil doux sur ton moral via un check-in quotidien", "Gère ton réseau de soutien avec disponibilités en temps réel"] },
-              { icon: "🚫", titre: "Ce qu'Alma ne fait pas et ne fera jamais", items: ["Donner des avis médicaux — toujours consulter un professionnel", "Collecter, vendre ou analyser tes données personnelles", "Afficher des publicités", "Partager tes informations avec des tiers"], alert: true },
-              { icon: "🔒", titre: "Vie privée & IA", items: ["Compte anonyme — aucun email, aucun nom réel", "Toutes tes données restent sur ton appareil", "L'IA (Gemini Flash) génère des messages d'encouragement — elle ne stocke rien", "Tu peux supprimer toutes tes données à tout moment"] },
+              { icon: "🔒", titre: "Ta vie privée d'abord", privacy: true, accroche: "Ce qui se passe sur ton téléphone reste sur ton téléphone.", items: ["Toutes tes données restent sur ton appareil — rien ne part sur un serveur", "Compte 100% anonyme : aucun email, aucun nom réel", "Si tu veux, une sauvegarde chiffrée que toi seule peux ouvrir", "Tu peux tout supprimer à tout moment"] },
+              { icon: "🤱", titre: "Ce qu'Alma fait", items: ["Suit l'alimentation, le sommeil et les couches de bébé", "T'accompagne dans le post-partum (corps, mental, nutrition)", "Te donne accès à une bibliothèque de fiches physiologiques", "Garde un œil doux sur ton moral via un check-in quotidien", "Gère ton réseau de soutien avec disponibilités en temps réel", "T'envoie des mots d'encouragement bienveillants, adaptés à l'âge de bébé"] },
+              { icon: "🚫", titre: "Ce qu'Alma ne fait pas et ne fera jamais", items: ["Donner des avis médicaux — toujours consulter un professionnel", "Vendre, analyser ou partager tes données — jamais", "Afficher des publicités"], alert: true },
             ].map((section) => (
-              <div key={section.titre} style={{ background: section.alert ? "#FFF8F0" : p.white, borderRadius: 16, padding: "14px 16px", border: `1px solid ${section.alert ? "#F0C090" : p.linDark}` }}>
+              <div key={section.titre} style={{ background: section.alert ? "#FFF8F0" : section.privacy ? "rgba(200,219,201,0.4)" : p.white, borderRadius: 16, padding: "14px 16px", border: section.privacy ? `1.5px solid ${p.sauge}` : `1px solid ${section.alert ? "#F0C090" : p.linDark}` }}>
                 <div style={{ fontSize: 13, fontWeight: 700, color: section.alert ? "#A0620A" : p.text, marginBottom: 8 }}>{section.icon} {section.titre}</div>
+                {section.accroche && (
+                  <div style={{ fontSize: 13, fontWeight: 600, color: p.text, lineHeight: 1.5, marginBottom: 8 }}>{section.accroche}</div>
+                )}
                 {section.items.map((item, i) => (
                   <div key={i} style={{ fontSize: 12, color: p.textLight, display: "flex", gap: 8, marginBottom: 4 }}>
                     <span style={{ color: section.alert ? "#C07030" : p.sauge, flexShrink: 0 }}>·</span>

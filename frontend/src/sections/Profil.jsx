@@ -155,7 +155,7 @@ export default function Profil() {
           {[
             "Aucune donnée personnelle collectée",
             "Aucune publicité, jamais",
-            "L'IA génère des messages — elle ne stocke rien",
+            "Aucune donnée envoyée à un service tiers",
             "Données stockées localement sur ton appareil",
           ].map((item, i) => (
             <div key={i} style={{ fontSize: 12, color: "rgba(255,255,255,0.65)", display: "flex", gap: 8, marginBottom: 6 }}>
