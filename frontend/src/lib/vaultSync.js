@@ -77,6 +77,10 @@ export async function restoreFromPhrase(phrase) {
   } catch {
     // structure inattendue : on n'altère rien
   }
+  try {
+    const chk = JSON.parse(localStorage.getItem('alma_bebe') || 'null');
+    console.log('RESTORE a écrit alma_bebe -> bebes:', chk?.state?.bebes?.length);
+  } catch (e) { console.log('RESTORE check err', e); }
   const st = useBackupStore.getState();
   st.setSecrets({ authToken, encKeyB64 });
   st.setEnabled(true);

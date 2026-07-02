@@ -18,6 +18,10 @@ import Alertes from "./sections/Alertes";
 import NavBar from "./components/ui/NavBar";
 
 export default function App() {
+  try {
+    const _b = JSON.parse(localStorage.getItem('alma_bebe') || 'null');
+    console.log('APP MOUNT localStorage alma_bebe -> bebes:', _b?.state?.bebes?.length);
+  } catch (_) {}
   const { uuid, initUser, isNewUser } = useUserStore();
   const bebes = useBebeStore((s) => s.bebes);
   const bebeActifId = useBebeStore((s) => s.bebeActifId);
