@@ -5,7 +5,7 @@ import { useSessionStore } from '../store/useSessionStore';
 import { useShareStore } from '../store/useShareStore';
 import { useCarnetStore } from '../store/useCarnetStore';
 import { deriveSecrets, importEncKey, encryptJSON, decryptJSON } from './vaultCrypto';
-import { initVault, pullVault, pushVault } from './vaultClient';
+import { initVault, pullVault, pushVault, deleteVault } from './vaultClient';
 
 const LOCAL_KEYS = ['alma_user', 'alma_bebe', 'alma_session', 'alma_share', 'alma_carnet'];
 
@@ -53,8 +53,12 @@ export async function enableBackup(phrase) {
 }
 
 export async function disableBackup() {
-  // Option 1 : on arrête et on oublie les secrets localement.
-  // (Effacement du coffre côté serveur : à ajouter plus tard via un endpoint DELETE.)
+  // Droit à l'effacement : on supprime d'abord le coffre côté serveur, puis on oublie
+  // les secrets localement. Le reset local reste prioritaire même si le DELETE échoue.
+  const st = useBackupStore.getState();
+  if (st.authToken) {
+    try { await deleteVault(st.authToken); } catch (e) { /* le reset local reste prioritaire */ }
+  }
   useBackupStore.getState().reset();
 }
 

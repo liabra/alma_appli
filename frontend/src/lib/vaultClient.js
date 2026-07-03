@@ -24,3 +24,8 @@ export async function pushVault(authToken, blob, baseVersion) {
   if (!res.ok) throw new Error('push ' + res.status);
   return res.json();                            // { version, updated_at }
 }
+export async function deleteVault(authToken) {
+  const res = await req('/vault', 'DELETE', authToken);
+  if (!res.ok) throw new Error('delete ' + res.status);
+  return res.json();                            // { deleted: true }
+}

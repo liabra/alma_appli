@@ -11,6 +11,7 @@ import Info from "./sections/Info";
 import Carnet from "./sections/Carnet";
 import Profil from "./sections/Profil";
 import Recuperation from "./sections/Recuperation";
+import Confidentialite from "./sections/Confidentialite";
 import Alertes from "./sections/Alertes";
 import NavBar from "./components/ui/NavBar";
 
@@ -31,6 +32,10 @@ export default function App() {
 
   if (window.location.pathname === "/recuperation") {
     return <Routes><Route path="/recuperation" element={<Recuperation />} /></Routes>;
+  }
+
+  if (window.location.pathname === "/confidentialite") {
+    return <Routes><Route path="/confidentialite" element={<Confidentialite />} /></Routes>;
   }
 
   // Attendre le premier rendu (les stores persistés sont réhydratés de façon synchrone)

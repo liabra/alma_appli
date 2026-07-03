@@ -4,6 +4,7 @@ import { useSessionStore } from "../store/useSessionStore";
 import { useUserStore } from "../store/useUserStore";
 import { useNavigate } from "react-router-dom";
 import CarteSauvegarde from "../components/backup/CarteSauvegarde";
+import LogoAlma from "../components/ui/LogoAlma";
 
 const p = {
   terracotta: "#C4714A", terracottaL: "#D4876A", terracottaPale: "#F0D5C5",
@@ -148,6 +149,25 @@ export default function Profil() {
 
         {/* Sauvegarde chiffrée */}
         <CarteSauvegarde />
+
+        {/* À propos d'Alma */}
+        <div style={{ background: p.white, borderRadius: 20, padding: "22px 20px", border: `1px solid ${p.linDark}`, textAlign: "center" }}>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 4 }}>
+            <LogoAlma size={170} />
+          </div>
+          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 32, fontWeight: 600, color: p.terracotta, lineHeight: 1, marginBottom: 12 }}>alma</div>
+          <div style={{ fontSize: 13, color: p.textLight, fontStyle: "italic", lineHeight: 1.6, marginBottom: 12 }}>
+            Du latin alma — « qui nourrit, bienveillante ».<br />
+            En espagnol, alma — « l'âme ».
+          </div>
+          <div style={{ fontSize: 12, color: p.textLight, lineHeight: 1.5, marginBottom: 14 }}>
+            Pensée pour t'accompagner, pas pour te surveiller.
+          </div>
+          <button onClick={() => { window.location.href = "/confidentialite"; }}
+            style={{ background: "transparent", border: "none", cursor: "pointer", fontSize: 12, color: p.textLight, textDecoration: "underline" }}>
+            Confidentialité & données →
+          </button>
+        </div>
 
         {/* Vie privée */}
         <div style={{ background: "#2C3E2D", borderRadius: 20, padding: "18px 20px" }}>

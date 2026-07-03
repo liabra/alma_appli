@@ -56,7 +56,8 @@ export default function Onboarding() {
       {step === 0 && (
         <>
           <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 52, fontWeight: 700, color: p.terracotta, marginBottom: 4, letterSpacing: "-1px" }}>alma</div>
-          <div style={{ fontSize: 14, color: p.sauge, fontWeight: 600, marginBottom: 32, letterSpacing: "0.1em", textTransform: "uppercase" }}>ton espace maternité</div>
+          <div style={{ fontSize: 14, color: p.sauge, fontWeight: 600, marginBottom: 4, letterSpacing: "0.1em", textTransform: "uppercase" }}>ton espace maternité</div>
+          <div style={{ fontSize: 11, color: p.textLight, fontStyle: "italic", marginBottom: 32 }}>du latin alma — « qui nourrit »</div>
 
           <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: 10, marginBottom: 28 }}>
             {[
@@ -75,6 +76,12 @@ export default function Onboarding() {
                     <span>{item}</span>
                   </div>
                 ))}
+                {section.privacy && (
+                  <button onClick={() => window.location.href = "/confidentialite"}
+                    style={{ marginTop: 8, fontSize: 11, fontWeight: 600, color: p.sauge, background: "transparent", border: "none", cursor: "pointer", textDecoration: "underline", padding: 0 }}>
+                    En savoir plus →
+                  </button>
+                )}
               </div>
             ))}
           </div>
