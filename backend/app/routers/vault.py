@@ -62,3 +62,10 @@ def write_vault(payload: BlobIn,
     vault.updated_at = datetime.now(timezone.utc)
     session.add(vault); session.commit()
     return {"version": vault.version, "updated_at": vault.updated_at}
+
+@router.delete("/vault")
+def delete_vault(vault: Vault = Depends(get_current_vault),
+                 session: Session = Depends(get_session)):
+    session.delete(vault)
+    session.commit()
+    return {"deleted": True}
