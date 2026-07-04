@@ -29,6 +29,12 @@ export default defineConfig({
           { src: "/icons/alma-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
           { src: "/icons/alma-maskable-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
         ],
+        shortcuts: [
+          { name: "Ajouter une tétée", short_name: "Tétée", url: "/?action=tetee",
+            icons: [{ src: "/icons/alma-192.png", sizes: "192x192" }] },
+          { name: "Carnet de soins", short_name: "Carnet", url: "/?section=carnet",
+            icons: [{ src: "/icons/alma-192.png", sizes: "192x192" }] },
+        ],
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
